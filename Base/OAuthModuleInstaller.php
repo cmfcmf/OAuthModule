@@ -52,18 +52,7 @@ class OAuthModuleInstaller extends Zikula_AbstractInstaller
         }
     
         // set up all our vars with initial values
-        $this->setVar('twitterConsumerKey', '');
-        $this->setVar('twitterConsumerSecret', '');
-        $this->setVar('loginProviderTwitter', false);
-        $this->setVar('loginProviderGithub', false);
-        $this->setVar('loginProviderGoogle', false);
-        $this->setVar('registrationProviderTwitter', false);
-        $this->setVar('registrationProviderGithub', false);
-        $this->setVar('registrationProviderGoogle', false);
-        $this->setVar('githubConsumerKey', '');
-        $this->setVar('githubConsumerSecret', '');
-        $this->setVar('googleConsumerKey', '');
-        $this->setVar('googleConsumerSecret', '');
+        $this->setVar('suggestRegistrationOnFailedLogin', false);
     
         $categoryRegistryIdsPerEntity = array();
     

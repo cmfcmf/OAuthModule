@@ -81,13 +81,13 @@ abstract class AbstractUserEntity extends Zikula_EntityAccess
     
     /**
      * @ORM\Column(type="bigint")
-     * @var bigint $userId.
+     * @var integer $userId.
      */
     protected $userId = 0;
     
     /**
-     * @ORM\Column(length=255)
-     * @var string $claimedId.
+     * @ORM\Column(type="text", length=1000)
+     * @var text $claimedId.
      */
     protected $claimedId = '';
     
@@ -329,7 +329,7 @@ abstract class AbstractUserEntity extends Zikula_EntityAccess
     /**
      * Get claimed id.
      *
-     * @return string
+     * @return text
      */
     public function getClaimedId()
     {
@@ -339,7 +339,7 @@ abstract class AbstractUserEntity extends Zikula_EntityAccess
     /**
      * Set claimed id.
      *
-     * @param string $claimedId.
+     * @param text $claimedId.
      *
      * @return void
      */

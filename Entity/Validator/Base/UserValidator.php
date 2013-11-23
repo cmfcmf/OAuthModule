@@ -57,8 +57,8 @@ class UserValidator extends BaseAbstractValidator
             $errorInfo['message'] = __f('Error! Field value must be a valid user id (%s).', array('user id'), $dom);
             return $errorInfo;
         }
-        if (!$this->isStringNotLongerThan('claimedId', 255)) {
-            $errorInfo['message'] = __f('Error! Length of field value must not be higher than %2$s (%1$s).', array('claimed id', 255), $dom);
+        if (!$this->isStringNotLongerThan('claimedId', 1000)) {
+            $errorInfo['message'] = __f('Error! Length of field value must not be higher than %2$s (%1$s).', array('claimed id', 1000), $dom);
             return $errorInfo;
         }
         if (!$this->isStringNotEmpty('claimedId')) {

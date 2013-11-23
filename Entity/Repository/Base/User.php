@@ -40,7 +40,7 @@ class User extends EntityRepository
     /**
      * @var string The default sorting field/expression.
      */
-    protected $defaultSortingField = 'claimedId';
+    protected $defaultSortingField = 'provider';
 
     /**
      * @var Request The request object given by the calling controller.
@@ -119,7 +119,7 @@ class User extends EntityRepository
      */
     public function getTitleFieldName()
     {
-        $fieldName = 'claimedId';
+        $fieldName = 'provider';
 
         return $fieldName;
     }
@@ -131,7 +131,7 @@ class User extends EntityRepository
      */
     public function getDescriptionFieldName()
    {
-        $fieldName = 'provider';
+        $fieldName = 'claimedId';
 
         return $fieldName;
     }
