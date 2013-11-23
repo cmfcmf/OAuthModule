@@ -15,7 +15,8 @@
         "psr-0": { "Cmfcmf\\OAuthModule\\": "" }
     },
     "require": {
-        "php": ">5.3.3"
+        "php": ">5.3.3",
+        "lusitanian/oauth": "~0.2"
     },
     "suggest": {
     },

@@ -13,11 +13,29 @@
 namespace Cmfcmf\OAuthModule\Controller;
 
 use Cmfcmf\OAuthModule\Controller\Base\AdminController as BaseAdminController;
+use ModUtil;
+use SecurityUtil;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * This is the Admin controller class providing navigation and interaction functionality.
  */
 class AdminController extends BaseAdminController
 {
-    // feel free to add your own controller methods here
+    /**
+     * This method is the default function handling the admin area called without defining arguments.
+     *
+     * @return mixed Output.
+     *
+     * @throws AccessDeniedHttpException Thrown if the user doesn't have required permissions
+     */
+    public function indexAction(Request $request)
+    {
+        if (!SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
+            throw new AccessDeniedHttpException();
+        }
+        return new RedirectResponse(ModUtil::url($this->name, 'admin', 'config'));
+    }
 }

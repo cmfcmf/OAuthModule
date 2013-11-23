@@ -13,6 +13,7 @@
 namespace Cmfcmf\OAuthModule\Entity\Repository;
 
 use Cmfcmf\OAuthModule\Entity\Repository\Base\User as BaseUser;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Repository class used to implement own convenience methods for performing certain DQL queries.
@@ -21,5 +22,25 @@ use Cmfcmf\OAuthModule\Entity\Repository\Base\User as BaseUser;
  */
 class User extends BaseUser
 {
-    // feel free to add your own methods here, like for example reusable DQL queries
+    /**
+     * Selects a list of objects with a given where clause.
+     *
+     * @param string  $where    The where clause to use when retrieving the collection (optional) (default='').
+     * @param string  $orderBy  The order-by clause to use when retrieving the collection (optional) (default='').
+     * @param boolean $useJoins Whether to include joining related objects (optional) (default=true).
+     * @param boolean $slimMode If activated only some basic fields are selected without using any joins (optional) (default=false).
+     *
+     * @return ArrayCollection collection containing retrieved Cmfcmf\OAuthModule\Entity\UserEntity instances
+     */
+    public function selectWhere($where = '', $orderBy = '', $useJoins = true, $slimMode = false)
+    {
+        $qb = $this->genericBaseQuery($where, $orderBy, $useJoins, $slimMode);
+        if ((!$useJoins || !$slimMode) && $this->getRequest() !== null) {
+            $qb = $this->addCommonViewFilters($qb);
+        }
+
+        $query = $this->getQueryFromBuilder($qb);
+
+        return $this->retrieveCollectionResult($query, $orderBy, false);
+    }
 }

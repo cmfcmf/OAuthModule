@@ -25,3 +25,4 @@ $helper = ServiceUtil::getService('doctrine_extensions');
 $helper->getListener('timestampable');
 $helper->getListener('standardfields');
 
+require_once(__DIR__ . '/vendor/autoload.php');
