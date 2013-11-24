@@ -1,0 +1,51 @@
+body {
+    background-color: #ddd;
+    margin: 10px;
+    text-align: left;
+}
+
+.cmfcmfoauthmodule-finderform fieldset,
+.cmfcmfoauthmodule-finderform fieldset legend {
+    background-color: #fff;
+    border: none;
+}
+
+#cmfcmfoauthmoduleItemContainer {
+    background-color: #eee;
+    height: 300px;
+    overflow: auto;
+    padding: 5px;
+}
+
+#cmfcmfoauthmoduleItemContainer ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#cmfcmfoauthmoduleItemContainer a {
+    color: #000;
+    margin: 0.1em 0.2em;
+    text-decoration: underline;
+}
+#cmfcmfoauthmoduleItemContainer a:hover,
+#cmfcmfoauthmoduleItemContainer a:focus,
+#cmfcmfoauthmoduleItemContainer a:active {
+    color: #900;
+    text-decoration: none;
+}
+
+#cmfcmfoauthmoduleItemContainer a img {
+    border: none;
+}
+
+#cmfcmfoauthmoduleItemContainer a img {
+    border: 1px solid #ccc;
+    background-color: #f5f5f5;
+    padding: 0.5em;
+}
+#cmfcmfoauthmoduleItemContainer a:hover img,
+#cmfcmfoauthmoduleItemContainer a:focus img,
+#cmfcmfoauthmoduleItemContainer a:active img {
+    background-color: #fff;
+}
