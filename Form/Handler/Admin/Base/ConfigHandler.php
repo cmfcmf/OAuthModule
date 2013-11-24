@@ -126,7 +126,7 @@ class ConfigHandler extends Zikula_Form_AbstractHandler
             } catch (\Exception $e) {
                 $msg = $this->__('Error! Failed to set configuration variables.');
                 if (System::isDevelopmentMode()) {
-                    $msg .= ' ' . $e->getMessage());
+                    $msg .= ' ' . $e->getMessage();
                 }
                 throw new \RuntimeException($msg);
             }
