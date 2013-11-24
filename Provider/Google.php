@@ -12,24 +12,16 @@
 namespace Cmfcmf\OAuthModule\Provider;
 
 /**
- * The Github OAuth.2 provider class.
+ * The Google OAuth.2 provider class.
  */
-class Github extends AbstractOAuth2Provider
+class Google extends AbstractOAuth2Provider
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getOAuthServiceName()
-    {
-        return 'GitHub';
-    }
-
     /**
      * {@inheritdoc}
      */
     public function getProviderDisplayName()
     {
-        return $this->__('GitHub');
+        return $this->__('Google');
     }
 
     /**
@@ -37,7 +29,7 @@ class Github extends AbstractOAuth2Provider
      */
     public function getIcon()
     {
-        return 'fa-github';
+        return 'fa-google-plus';
     }
 
     /**
@@ -45,7 +37,7 @@ class Github extends AbstractOAuth2Provider
      */
     public function getScopesForLogin()
     {
-        return array();
+        return array('https://www.googleapis.com/auth/userinfo.email');
     }
 
     /**
@@ -53,28 +45,22 @@ class Github extends AbstractOAuth2Provider
      */
     public function getScopesForRegistration()
     {
-        return array('user:email');
+        return array('https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile');
     }
 
     /**
      * {@inheritdoc}
      *
-     * @param \OAuth\OAuth2\Service\GitHub  $github
+     * @param \OAuth\OAuth2\Service\Google  $google
      *
      * @return array
      *
-     * Fetches the user's email address and GitHub user name.
+     * @todo To be implemented!!
      */
-    public function getAdditionalInformationForRegistration($github)
+    public function getAdditionalInformationForRegistration($google)
     {
         try {
-            $result = json_decode($github->request('user/emails'), true);
-            $email = $result[0];
-
-            $result = json_decode($github->request('user'), true);
-            $uname = $result['login'];
-
-            return array('email' => $email, 'hideEmail' => true, 'uname' => $uname);
+            return array();
         } catch (\Exception $e) {
             // Catch anything.
             return array();
@@ -86,7 +72,7 @@ class Github extends AbstractOAuth2Provider
      */
     public function getApplicationRegistrationDoc()
     {
-        $message = $this->__('You need to register an application at <a href="https://github.com/settings/applications/new">https://github.com/settings/applications/new</a> to use GitHub OAuth.');
+        $message = $this->__('You need to register an application at <a href="https://cloud.google.com/console#/project">https://cloud.google.com/console#/project</a> to use Google OAuth.');
         return $message . '<br />' . parent::getApplicationRegistrationDoc();
     }
 }

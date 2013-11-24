@@ -20,7 +20,7 @@ class AuthenticationMethod extends AuthenticationMethodHelper
     {
         $providerName =  $this->getProvider()->getProviderName();
 
-        if (ModUtil::getVar('CmfcmfOAuthModule', 'loginProvider' . $providerName) || 1) {
+        if (ModUtil::getVar('CmfcmfOAuthModule', 'loginProvider' . $providerName)) {
             $this->enableForAuthentication();
         } else {
             $this->disableForAuthentication();
@@ -31,7 +31,7 @@ class AuthenticationMethod extends AuthenticationMethodHelper
     {
         $providerName =  $this->getProvider()->getProviderName();
 
-        if (ModUtil::getVar('CmfcmfOAuthModule', 'registrationProvider' . $providerName) || 1) {
+        if (ModUtil::getVar('CmfcmfOAuthModule', 'registrationProvider' . $providerName)) {
             $this->enableForRegistration();
         } else {
             $this->disableForRegistration();
@@ -41,7 +41,7 @@ class AuthenticationMethod extends AuthenticationMethodHelper
     /**
      * Get the appropriate provider class.
      *
-     * @return \Cmfcmf\OAuthModule\Provider\AbstractProvider
+     * @return \Cmfcmf\OAuthModule\Provider\AbstractOAuthProvider
      */
     public function getProvider()
     {

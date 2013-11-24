@@ -22,7 +22,7 @@ class ProviderUtil
     /**
      * Returns all the available OAuth provider.
      *
-     * @return \Cmfcmf\OAuthModule\Provider\AbstractProvider[]
+     * @return \Cmfcmf\OAuthModule\Provider\AbstractOAuthProvider[]
      */
     public static function getAllOAuthProvider()
     {
@@ -30,7 +30,9 @@ class ProviderUtil
         $finder->files()
             ->in(dirname(__FILE__) . "/../Provider")
             ->name('*.php')
-            ->notName('AbstractProvider.php')
+            ->notName('AbstractOAuthProvider.php')
+            ->notName('AbstractOAuth1Provider.php')
+            ->notName('AbstractOAuth2Provider.php')
             ->depth('== 0')
             ->sortByName();
 

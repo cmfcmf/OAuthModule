@@ -16,7 +16,7 @@
     },
     "require": {
         "php": ">5.3.3",
-        "lusitanian/oauth": "~0.2"
+        "lusitanian/oauth": "dev-master"
     },
     "suggest": {
     },

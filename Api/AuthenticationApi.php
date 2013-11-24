@@ -14,6 +14,7 @@ namespace Cmfcmf\OAuthModule\Api;
 use Cmfcmf\OAuthModule\Entity\UserEntity;
 use Cmfcmf\OAuthModule\Helper\AuthenticationMethod;
 use Cmfcmf\OAuthModule\Helper\Builder;
+use Cmfcmf\OAuthModule\Provider\AbstractOAuth1Provider;
 use Cmfcmf\OAuthModule\SymfonySession;
 use LogUtil;
 use ModUtil;
@@ -23,8 +24,6 @@ use Symfony\Component\Debug\Exception\FatalErrorException;
 use System;
 use Zikula_Api_AbstractAuthentication;
 use Cmfcmf\OAuthModule\Util\ProviderUtil;
-use \OAuth\OAuth1\Service\AbstractService as OAuth1AbstractService;
-
 
 /**
  * The user authentication services for the log-in process through the OAuth protocol.
@@ -51,7 +50,7 @@ class AuthenticationApi extends Zikula_Api_AbstractAuthentication
 
         $oAuthProvider = ProviderUtil::getAllOAuthProvider();
 
-        /** @var \Cmfcmf\OAuthModule\Provider\AbstractProvider $provider */
+        /** @var \Cmfcmf\OAuthModule\Provider\AbstractOAuthProvider $provider */
         foreach ($oAuthProvider as $provider) {
             $authenticationMethod = new AuthenticationMethod(
                 $this->name,
@@ -360,7 +359,7 @@ class AuthenticationApi extends Zikula_Api_AbstractAuthentication
             return $this->internalCheckPasswordResults[$hash];
         }
 
-        /** @var \Cmfcmf\OAuthModule\Provider\AbstractProvider $OAuthHelper */
+        /** @var \Cmfcmf\OAuthModule\Provider\AbstractOAuthProvider $OAuthHelper */
         $OAuthHelper = Builder::buildInstance($authenticationMethod['method']);
         if (!isset($OAuthHelper) || ($OAuthHelper === false)) {
             throw new \InvalidArgumentException($this->__('The specified authentication method appears to be unsupported.'));
@@ -383,12 +382,11 @@ class AuthenticationApi extends Zikula_Api_AbstractAuthentication
         /** @var \Symfony\Component\HttpFoundation\Request $request */
         $request = \ServiceUtil::get('request');
         $storage = new SymfonySession($request->getSession(), false);
-        //$storage = new Session(false);
 
         /** @var \OAuth\Common\Service\AbstractService $service  */
         $service = $OAuthHelper->createService($storage, $scopes, $reentrantURL);
 
-        $oAuthType = ($service instanceof OAuth1AbstractService) ? 1 : 2;
+        $oAuthType = ($OAuthHelper instanceof AbstractOAuth1Provider) ? 1 : 2;
 
         $code = $this->request->query->get('code', false);
         $error = $this->request->query->get('error', false);
@@ -402,6 +400,7 @@ class AuthenticationApi extends Zikula_Api_AbstractAuthentication
             if (($code && $oAuthType === 2) || ($oAuthToken && $oAuthVerifier && $oAuthType === 1)) {
                 if ($oAuthType === 1) {
                     // OAuth 1
+                    /** @var \Cmfcmf\OAuthModule\Provider\AbstractOAuth1Provider $OAuthHelper */
                     $token = $storage->retrieveAccessToken($OAuthHelper->getOAuthServiceName());
 
                     /** @var \OAuth\OAuth1\Token\StdOAuth1Token $token */
@@ -415,9 +414,11 @@ class AuthenticationApi extends Zikula_Api_AbstractAuthentication
                 } else {
                     // OAuth 2
                     /** @var \OAuth\Common\Token\TokenInterface $token */
+                    /** @var \OAuth\OAuth2\Service\AbstractService $service */
                     $token = $service->requestAccessToken($code);
                     $claimedId = $token->getAccessToken();
                 }
+
                 $returnResult = array(
                     'claimed_id' => $claimedId
                 );
@@ -815,9 +816,9 @@ class AuthenticationApi extends Zikula_Api_AbstractAuthentication
     {
         /** @var \Cmfcmf\OAuthModule\Helper\AuthenticationMethod $authenticationMethod */
         $authenticationMethod = $this->authenticationMethods[($args['authentication_method']['method'])];
-        /** @var \Cmfcmf\OAuthModule\Provider\AbstractProvider $provider */
+        /** @var \Cmfcmf\OAuthModule\Provider\AbstractOAuthProvider $provider */
         $provider = $authenticationMethod->getProvider();
 
-        return $provider->redirectToRegistrationOnLoginError();
+        return ModUtil::getVar('CmfcmfOAuthModule', 'suggestRegistrationOnFailedLogin', true) && $provider->redirectToRegistrationOnLoginError();
     }
 }

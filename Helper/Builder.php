@@ -12,7 +12,7 @@
 namespace Cmfcmf\OAuthModule\Helper;
 
 /**
- * Builds concrete instances of \Cmfcmf\OAuthModule\Provider\AbstractProvider or one of its subclasses or sibling classes, based on a specified authentication method.
+ * Builds concrete instances of \Cmfcmf\OAuthModule\Provider\AbstractOAuthProvider or one of its subclasses or sibling classes, based on a specified authentication method.
  */
 class Builder
 {
@@ -23,7 +23,7 @@ class Builder
      *
      * @internal param array|string $authenticationInfo The authentication information entered by the user, and passed on to the helper.
      *
-     * @return \Cmfcmf\OAuthModule\Provider\AbstractProvider An instance of OpenID_OpenIDProvider_AbstractProvider or one of its siblings or subclasses appropriate for the authentication
+     * @return \Cmfcmf\OAuthModule\Provider\AbstractOAuthProvider An instance of OpenID_OpenIDProvider_AbstractProvider or one of its siblings or subclasses appropriate for the authentication
      *                                          method, and initialized with the authentication information provided.
      */
     public static function buildInstance($authenticationMethod)

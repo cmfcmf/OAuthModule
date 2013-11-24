@@ -14,30 +14,29 @@ namespace Cmfcmf\OAuthModule\Provider;
 use OAuth\OAuth1\Token\StdOAuth1Token;
 
 /**
- * A helper or utility class that provides information for a Twitter Account OAuth in expected formats for the protocol.
+ * The Twitter OAuth 2 provider class.
  */
-class Twitter extends AbstractProvider
+class Twitter extends AbstractOAuth1Provider
 {
+    /**
+     * {@inheritdoc}
+     */
     public function getProviderDisplayName()
     {
         return $this->__('Twitter');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getIcon()
     {
         return 'fa-twitter';
     }
 
-    public function getScopesForLogin()
-    {
-        return array();
-    }
-
-    public function getScopesForRegistration()
-    {
-        return array();
-    }
-
+    /**
+     * {@inheritdoc}
+     */
     public function extractClaimedIdFromToken(StdOAuth1Token $token)
     {
         $params = $token->getExtraParams();
@@ -46,11 +45,9 @@ class Twitter extends AbstractProvider
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
-     * @param \OAuth\OAuth1\Service\Twitter  $twitter
-     *
-     * @return array
+     * @param \OAuth\OAuth1\Service\Twitter $twitter
      *
      * @note Twitter does NOT provide the user's email address.
      */
@@ -66,5 +63,14 @@ class Twitter extends AbstractProvider
             // Catch anything.
             return array();
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getApplicationRegistrationDoc()
+    {
+        $message = $this->__('You need to register an application at <a href="https://dev.twitter.com/apps">https://dev.twitter.com/apps</a> to use Twitter OAuth.');
+        return $message . '<br />' . parent::getApplicationRegistrationDoc();
     }
 }

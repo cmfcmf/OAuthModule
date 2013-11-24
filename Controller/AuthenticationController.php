@@ -107,7 +107,7 @@ class AuthenticationController extends Zikula_Controller_AbstractAuthentication
                 }
             }
 
-            /** @var \Cmfcmf\OAuthModule\Provider\AbstractProvider $OAuthHelper */
+            /** @var \Cmfcmf\OAuthModule\Provider\AbstractOAuthProvider $OAuthHelper */
             $OAuthHelper = Builder::buildInstance($args['method']);
 
             return $this->view->assign('authentication_method', $args['method'])
