@@ -17,6 +17,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use LogUtil;
 use ModUtil;
 use SecurityUtil;
+use System;
 use Zikula_Form_AbstractHandler;
 use Zikula_Form_View;
 
@@ -120,8 +121,14 @@ class ConfigHandler extends Zikula_Form_AbstractHandler
             $data = $this->view->getValues();
 
             // update all module vars
-            if (!$this->setVars($data['config'])) {
-                throw new \RuntimeException($this->__('Error! Failed to set configuration variables.'));
+            try {
+                $this->setVars($data['config']);
+            } catch (\Exception $e) {
+                $msg = $this->__('Error! Failed to set configuration variables.');
+                if (System::isDevelopmentMode()) {
+                    $msg .= ' ' . $e->getMessage());
+                }
+                throw new \RuntimeException($msg);
             }
 
             LogUtil::registerStatus($this->__('Done! Module configuration updated.'));

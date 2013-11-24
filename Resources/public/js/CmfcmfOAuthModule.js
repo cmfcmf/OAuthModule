@@ -29,6 +29,8 @@ function oauthInitItemActions(objectType, func, containerId)
 
     // process normal links
     $$('#' + containerId + ' a').each(function (elem) {
+        // save css class before hiding (#428)
+        var elemClass = elem.readAttribute('class');
         // hide it
         elem.addClassName('hide');
         // determine the link text
@@ -42,7 +44,7 @@ function oauthInitItemActions(objectType, func, containerId)
         // determine the icon
         icon = '';
         if (elem.hasClassName('fa')) {
-            icon = '<span class="' + elem.readAttribute('class') + '"></span>';
+            icon = '<span class="' + elemClass + '"></span>';
         }
 
         contextMenu.addItem({

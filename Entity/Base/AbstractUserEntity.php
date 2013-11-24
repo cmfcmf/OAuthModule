@@ -578,6 +578,16 @@ abstract class AbstractUserEntity extends Zikula_EntityAccess
             if (in_array($currentFunc, array('index', 'view'))) {
             }
             if (in_array($currentFunc, array('index', 'view', 'display'))) {
+                $component = 'CmfcmfOAuthModule:User:';
+                $instance = $this->id . '::';
+                if (SecurityUtil::checkPermission($component, $instance, ACCESS_DELETE)) {
+                    $this->_actions[] = array(
+                        'url' => array('type' => 'admin', 'func' => 'delete', 'arguments' => array('ot' => 'user', 'id' => $this['id'])),
+                        'icon' => 'trash-o',
+                        'linkTitle' => __('Delete', $dom),
+                        'linkText' => __('Delete', $dom)
+                    );
+                }
             }
         }
         if ($currentType == 'user') {

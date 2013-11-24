@@ -526,6 +526,11 @@ class User extends EntityRepository
             return $qb;
         }*/
     
+        if ($this->getRequest() === null) {
+            // if no request is set we return (#433)
+            return $qb;
+        }
+    
         $parameters = $this->getViewQuickNavParameters('', array());
         foreach ($parameters as $k => $v) {
             if ($k == 'catId') {
