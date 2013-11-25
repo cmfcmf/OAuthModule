@@ -30,15 +30,7 @@ abstract class AbstractOAuth1Provider extends AbstractOAuthProvider
     /**
      * {@inheritdoc}
      */
-    public function getScopesForLogin()
-    {
-        return array();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getScopesForRegistration()
+    public function getScopesMinimum()
     {
         return array();
     }

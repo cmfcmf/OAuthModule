@@ -41,25 +41,28 @@ abstract class AbstractOAuthProvider implements Zikula_TranslatableInterface
     }
 
     /**
-     * Return an array of scopes needed for login.
+     * Return an array of scopes needed as a minimum for login.
      *
      * @return array The array of scopes.
      */
-    abstract public function getScopesForLogin();
+    abstract public function getScopesMinimum();
 
     /**
-     * Return an array of scopes for registration.
+     * Return an array of scopes needed for login to make it as good as possible, defaults to $this->getScopesMinimum().
      *
      * @return array The array of scopes.
      */
-    abstract function getScopesForRegistration();
+    public function getScopesMaximum()
+    {
+        $this->getScopesMinimum();
+    }
 
     /**
      * Returns the name of a FontAwesome icon or a path to an image to be used as the icon for this provider.
      *
      * @return string The icon.
      */
-    abstract function getIcon();
+    abstract public function getIcon();
 
     /**
      * Returns if the provider is registration capable.

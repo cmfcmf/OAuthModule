@@ -373,10 +373,10 @@ class AuthenticationApi extends Zikula_Api_AbstractAuthentication
             throw new \InvalidArgumentException($this->__('An invalid reentrant_url was recieved.'));
         }
 
-        if ($forRegistration) {
-            $scopes = $OAuthHelper->getScopesForRegistration();
+        if ($forRegistration && $this->getVar('useMaximumInformationForRegistration', true)) {
+            $scopes = $OAuthHelper->getScopesMaximum();
         } else {
-            $scopes = $OAuthHelper->getScopesForLogin();
+            $scopes = $OAuthHelper->getScopesMinimum();
         }
 
         if (!is_array($scopes)) {

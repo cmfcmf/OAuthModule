@@ -37,7 +37,7 @@ class Facebook extends AbstractOAuth2Provider
     /**
      * {@inheritdoc}
      */
-    public function getScopesForLogin()
+    public function getScopesMinimum()
     {
         return array();
     }
@@ -49,7 +49,7 @@ class Facebook extends AbstractOAuth2Provider
      *
      * Only use email scope.
      */
-    public function getScopesForRegistration()
+    public function getScopesMaximum()
     {
         return array(FacebookService::SCOPE_EMAIL);
     }

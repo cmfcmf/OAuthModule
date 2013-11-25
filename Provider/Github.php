@@ -11,6 +11,8 @@
 
 namespace Cmfcmf\OAuthModule\Provider;
 
+use OAuth\OAuth2\Service\GitHub as GitHubService;
+
 /**
  * The Github OAuth.2 provider class.
  */
@@ -43,17 +45,17 @@ class Github extends AbstractOAuth2Provider
     /**
      * {@inheritdoc}
      */
-    public function getScopesForLogin()
+    public function getScopesMinimum()
     {
-        return array();
+        return array(GitHubService::SCOPE_READONLY);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getScopesForRegistration()
+    public function getScopesMaximum()
     {
-        return array('user:email');
+        return array(GitHubService::SCOPE_USER_EMAIL);
     }
 
     /**

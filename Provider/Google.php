@@ -35,7 +35,7 @@ class Google extends AbstractOAuth2Provider
     /**
      * {@inheritdoc}
      */
-    public function getScopesForLogin()
+    public function getScopesMinimum()
     {
         return array('https://www.googleapis.com/auth/userinfo.email');
     }
@@ -43,7 +43,7 @@ class Google extends AbstractOAuth2Provider
     /**
      * {@inheritdoc}
      */
-    public function getScopesForRegistration()
+    public function getScopesMaximum()
     {
         return array('https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile');
     }
