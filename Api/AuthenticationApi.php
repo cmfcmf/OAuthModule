@@ -396,9 +396,15 @@ class AuthenticationApi extends Zikula_Api_AbstractAuthentication
         $error = $this->request->query->get('error', false);
         $oAuthToken = $this->request->query->get('oauth_token', false);
         $oAuthVerifier = $this->request->query->get('oauth_verifier', false);
+        $state = $this->request->query->get('state', false);
 
         if ($code || $error || $oAuthToken || $oAuthVerifier) {
             $reentrantURL = $this->request->getSession()->get('reentrant_url', '', 'OAuth_Authentication_checkPassword');
+
+            if ($reentrantURL != $state) {
+                return LogUtil::registerError($this->__('Something went wrong during the authentication process.'));
+            }
+
             $this->request->getSession()->clearNamespace('OAuth_Authentication_checkPassword');
 
             if (($code && $oAuthType === 2) || ($oAuthToken && $oAuthVerifier && $oAuthType === 1)) {
@@ -458,7 +464,7 @@ class AuthenticationApi extends Zikula_Api_AbstractAuthentication
                 $url = $service->getAuthorizationUri(array('oauth_token' => $token->getRequestToken()));
             } else {
                 // OAuth 2
-                $url = $service->getAuthorizationUri();
+                $url = $service->getAuthorizationUri(array('state' => $reentrantURL));
             }
             header('Location: ' . $url);
             exit;
