@@ -13,11 +13,34 @@
 namespace Cmfcmf\OAuthModule\Controller;
 
 use Cmfcmf\OAuthModule\Controller\Base\UserController as BaseUserController;
+use Cmfcmf\OAuthModule\Util\ControllerUtil;
+use ModUtil;
+use SecurityUtil;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * This is the User controller class providing navigation and interaction functionality.
  */
 class UserController extends BaseUserController
 {
-    // feel free to add your own controller methods here
+    /**
+     * {@inheritdoc}
+     */
+    public function viewAction(Request $request)
+    {
+        $controllerHelper = new ControllerUtil($this->serviceManager, ModUtil::getModule($this->name));
+
+        // parameter specifying which type of objects we are treating
+        $objectType = $request->query->filter('ot', 'mappedId', false, FILTER_SANITIZE_STRING);
+        $utilArgs = array('controller' => 'user', 'action' => 'view');
+        if (!in_array($objectType, $controllerHelper->getObjectTypes('controllerAction', $utilArgs))) {
+            $objectType = $controllerHelper->getDefaultObjectType('controllerAction', $utilArgs);
+        }
+        if (!SecurityUtil::checkPermission($this->name . ':' . ucwords($objectType) . ':', '::', ACCESS_COMMENT)) {
+            throw new AccessDeniedException();
+        }
+
+        return parent::viewAction($request);
+    }
 }

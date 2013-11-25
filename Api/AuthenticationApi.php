@@ -11,11 +11,13 @@
 
 namespace Cmfcmf\OAuthModule\Api;
 
+use Cmfcmf\OAuthModule\Entity\MappedIdEntity;
 use Cmfcmf\OAuthModule\Entity\UserEntity;
 use Cmfcmf\OAuthModule\Helper\AuthenticationMethod;
 use Cmfcmf\OAuthModule\Helper\Builder;
 use Cmfcmf\OAuthModule\Provider\AbstractOAuth1Provider;
 use Cmfcmf\OAuthModule\SymfonySession;
+use Cmfcmf\OAuthModule\Util\WorkflowUtil;
 use LogUtil;
 use ModUtil;
 use ServiceUtil;
@@ -297,16 +299,18 @@ class AuthenticationApi extends Zikula_Api_AbstractAuthentication
             return false;
         } else {
             try {
-                $user = new UserEntity();
-                $user->merge(array(
-                    'userId'        => $uid,
-                    'provider'      => $authenticationMethod['method'],
-                    'claimedId'     => $claimedID,
-                    'workflowState' => 'approved'
-                ));
-                $user->set_bypassValidation(true);
-                $this->entityManager->persist($user);
-                $this->entityManager->flush();
+                $workflowHelper = new WorkflowUtil($this->serviceManager, ModUtil::getModule($this->name));
+
+                $mappedId = new MappedIdEntity();
+                $mappedId->setUserId($uid);
+                $mappedId->setProvider($authenticationMethod['method']);
+                $mappedId->setClaimedId($claimedID);
+                $mappedId->setWorkflowState('approved');
+                $mappedId->set_bypassValidation(true);
+                $mappedId->setCreatedUserId($uid);
+                $mappedId->setUpdatedUserId($uid);
+
+                $workflowHelper->executeAction($mappedId, 'submitŝ');
                 return true;
             } catch (\Exception $e) {
                 return false;
@@ -649,10 +653,11 @@ class AuthenticationApi extends Zikula_Api_AbstractAuthentication
 
         if (isset($args['authentication_info']['claimed_id'])) {
             try {
-                $repository = $this->entityManager->getRepository("\\Cmfcmf\\OAuthModule\\Entity\\UserEntity");
-                $user = $repository->findOneBy(array('claimedId' => $args['authentication_info']['claimed_id']));
-                if ($user) {
-                    $claimedUid = $user['userId'];
+                $repository = $this->entityManager->getRepository("\\Cmfcmf\\OAuthModule\\Entity\\MappedIdEntity");
+                /** @var MappedIdEntity $mappedId */
+                $mappedId = $repository->findOneBy(array('claimedId' => $args['authentication_info']['claimed_id']));
+                if ($mappedId) {
+                    $claimedUid = $mappedId->getUserId();
                 } else {
                     return false;
                 }
