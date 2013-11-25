@@ -38,6 +38,13 @@
                             {formcheckbox id='suggestRegistrationOnFailedLogin' group='config'}
                         </div>
                     </div>
+                    <div class="form-group">
+                        {formlabel for='useMaximumInformationForRegistration' __text='Request as much information from the user as possbile during registration.' cssClass=' col-lg-3 control-label'}
+                        <div class="col-lg-9">
+                            {formcheckbox id='useMaximumInformationForRegistration' group='config'}
+                            <div class="alert alert-info">{gt text="Why should you disable this feature? Users might be feared, because it often isn't possible to specify which data we want exactly. Basically we are interested in the user's email address, his nickname and his language. But for most of the providers you cannot request only those, but potentially get much more information than needed. The user now may ask why your site want's that much information. But why should you enable this? For some providers, this really means a two-click-only account registration on your site, which is very fast and easy for new users."}</div>
+                        </div>
+                    </div>
                 </div>
                 {foreach from=$providers item='provider'}
                     <div class="tab-pane fade" id="tab{$provider->getProviderName()}">

@@ -53,6 +53,7 @@ class OAuthModuleInstaller extends Zikula_AbstractInstaller
     
         // set up all our vars with initial values
         $this->setVar('suggestRegistrationOnFailedLogin', false);
+        $this->setVar('useMaximumInformationForRegistration', false);
     
         $categoryRegistryIdsPerEntity = array();
     

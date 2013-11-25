@@ -108,7 +108,7 @@ class WorkflowUtil extends Zikula_AbstractBase
     /**
      * Retrieve the available actions for a given entity object.
      *
-     * @param Zikula_EntityAccess $entity The given entity instance.
+     * @param \Zikula_EntityAccess $entity The given entity instance.
      *
      * @return array List of available workflow actions.
      */
@@ -183,8 +183,8 @@ class WorkflowUtil extends Zikula_AbstractBase
     /**
      * Executes a certain workflow action for a given entity object.
      *
-     * @param Zikula_EntityAccess $entity   The given entity instance.
-     * @param string              $actionId Name of action to be executed. 
+     * @param \Zikula_EntityAccess $entity   The given entity instance.
+     * @param string               $actionId Name of action to be executed. 
      *
      * @return bool False on error or true if everything worked well.
      */
@@ -206,7 +206,7 @@ class WorkflowUtil extends Zikula_AbstractBase
     /**
      * Performs a conversion of the workflow object back to an array.
      *
-     * @param Zikula_EntityAccess $entity The given entity instance.
+     * @param \Zikula_EntityAccess $entity The given entity instance.
      *
      * @return bool False on error or true if everything worked well.
      */
