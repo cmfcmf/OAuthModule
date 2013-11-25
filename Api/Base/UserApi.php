@@ -45,11 +45,11 @@ class UserApi extends Zikula_AbstractApi
         $utilArgs = array('api' => 'user', 'action' => 'getlinks');
         $allowedObjectTypes = $controllerHelper->getObjectTypes('api', $utilArgs);
 
-        if (in_array('user', $allowedObjectTypes)
-            && SecurityUtil::checkPermission($this->name . ':User:', '::', ACCESS_READ)) {
-            $links[] = array('url' => ModUtil::url($this->name, 'user', 'view', array('ot' => 'user')),
-                             'text' => $this->__('Users'),
-                             'title' => $this->__('User list'));
+        if (in_array('mappedId', $allowedObjectTypes)
+            && SecurityUtil::checkPermission($this->name . ':MappedId:', '::', ACCESS_READ)) {
+            $links[] = array('url' => ModUtil::url($this->name, 'user', 'view', array('ot' => 'mappedId')),
+                             'text' => $this->__('Mapped ids'),
+                             'title' => $this->__('Mapped id list'));
         }
 
         return $links;
@@ -212,7 +212,7 @@ class UserApi extends Zikula_AbstractApi
         }
     
         // define the available user functions
-        $funcs = array('main', 'view');
+        $funcs = array('main', 'view', 'delete');
     
         // return if function url scheme is not being customised
         $customFuncs = array('view');

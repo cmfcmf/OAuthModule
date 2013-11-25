@@ -14,7 +14,7 @@ namespace Cmfcmf\OAuthModule\Controller\Base;
 
 use Cmfcmf\OAuthModule\Util\ControllerUtil;
 
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 use LogUtil;
 use ModUtil;
@@ -141,7 +141,7 @@ class ExternalController extends Zikula_AbstractController
      *
      * @return output The external item finder page
      *
-     * @throws AccessDeniedHttpException Thrown if the user doesn't have required permissions
+     * @throws AccessDeniedException Thrown if the user doesn't have required permissions
      */
     public function finderAction($objectType, $editor, $sort, $sortdir, $pos = 1, $num = 0)
     {
@@ -156,7 +156,7 @@ class ExternalController extends Zikula_AbstractController
         }
     
         if (!SecurityUtil::checkPermission('CmfcmfOAuthModule:' . ucwords($objectType) . ':', '::', ACCESS_COMMENT)) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException();
         }
     
         $entityClass = '\\Cmfcmf\\OAuthModule\\Entity\\' . ucwords($objectType) . 'Entity';

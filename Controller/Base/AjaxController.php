@@ -17,7 +17,7 @@ use Cmfcmf\OAuthModule\Util\ListEntriesUtil;
 use Cmfcmf\OAuthModule\Util\ViewUtil;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Doctrine\ORM\AbstractQuery;
 use DataUtil;
 use FormUtil;
@@ -47,17 +47,17 @@ class AjaxController extends Zikula_Controller_AbstractAjax
      *
      * @return mixed Output.
      *
-     * @throws AccessDeniedHttpException Thrown if the user doesn't have required permissions
+     * @throws AccessDeniedException Thrown if the user doesn't have required permissions
      */
     public function indexAction(Request $request)
     {
         if (!SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_OVERVIEW)) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException();
         }
     }
     
     
-    public function getUserUserIdUsersAction()
+    public function getMappedIdUserIdUsersAction()
     {
         return $this->getCommonUsersList();
     }
@@ -116,11 +116,11 @@ class AjaxController extends Zikula_Controller_AbstractAjax
             return true;
         }
     
-        $objectType = 'user';
+        $objectType = 'mappedId';
         if ($request->isMethod('POST') && $request->request->has('ot')) {
-            $objectType = $request->request->filter('ot', 'user', false, FILTER_SANITIZE_STRING);
+            $objectType = $request->request->filter('ot', 'mappedId', false, FILTER_SANITIZE_STRING);
         } elseif ($request->isMethod('GET') && $request->query->has('ot')) {
-            $objectType = $request->query->filter('ot', 'user', false, FILTER_SANITIZE_STRING);
+            $objectType = $request->query->filter('ot', 'mappedId', false, FILTER_SANITIZE_STRING);
         }
         $controllerHelper = new ControllerUtil($this->serviceManager, ModUtil::getModule($this->name));
         $utilArgs = array('controller' => 'ajax', 'action' => 'getItemListFinder');

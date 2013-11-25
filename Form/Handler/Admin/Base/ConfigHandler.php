@@ -12,7 +12,7 @@
 
 namespace Cmfcmf\OAuthModule\Form\Handler\Admin\Base;
 
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 use LogUtil;
 use ModUtil;
@@ -44,14 +44,14 @@ class ConfigHandler extends Zikula_Form_AbstractHandler
      *
      * @return boolean False in case of initialization errors, otherwise true.
      *
-     * @throws AccessDeniedHttpException Thrown if the user doesn't have admin permissions
+     * @throws AccessDeniedException Thrown if the user doesn't have admin permissions
      * @throws RuntimeException          Thrown if persisting configuration vars fails
      */
     public function initialize(Zikula_Form_View $view)
     {
         // permission check
         if (!SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException();
         }
 
         // retrieve module vars

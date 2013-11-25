@@ -35,14 +35,14 @@ class MailzApi extends Zikula_AbstractApi
         $plugins[] = array(
             'pluginid'      => 1,
             'module'        => 'CmfcmfOAuthModule',
-            'title'         => $this->__('3 newest users'),
-            'description'   => $this->__('A list of the three newest users.')
+            'title'         => $this->__('3 newest mapped ids'),
+            'description'   => $this->__('A list of the three newest mapped ids.')
         );
         $plugins[] = array(
             'pluginid'      => 2,
             'module'        => 'CmfcmfOAuthModule',
-            'title'         => $this->__('3 random users'),
-            'description'   => $this->__('A list of three random users.')
+            'title'         => $this->__('3 random mapped ids'),
+            'description'   => $this->__('A list of three random mapped ids.')
         );
         return $plugins;
     }
@@ -64,7 +64,7 @@ class MailzApi extends Zikula_AbstractApi
         ModUtil::initOOModule('CmfcmfOAuthModule');
         // $args is something like:
         // Array ( [uid] => 5 [contenttype] => h [pluginid] => 1 [nid] => 1 [last] => 0000-00-00 00:00:00 [params] => Array ( [] => ) ) 1
-        $objectType = 'user';
+        $objectType = 'mappedId';
     
         $entityClass = '\\Cmfcmf\\OAuthModule\\Entity\\' . ucwords($objectType) . 'Entity';
         $serviceManager = ServiceUtil::getManager();
@@ -112,10 +112,10 @@ class MailzApi extends Zikula_AbstractApi
              ->assign($repository->getAdditionalTemplateParameters('api', array('name' => 'mailz')));
     
         if ($args['contenttype'] == 't') { /* text */
-            return $view->fetch('Mailz/itemlist_user_text.tpl');
+            return $view->fetch('Mailz/itemlist_mappedId_text.tpl');
         } else {
             //return $view->fetch('ContentType/itemlist_display.html');
-            return $view->fetch('Mailz/itemlist_user_html.tpl');
+            return $view->fetch('Mailz/itemlist_mappedId_html.tpl');
         }
     }
 }

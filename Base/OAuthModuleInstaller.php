@@ -193,7 +193,7 @@ class OAuthModuleInstaller extends Zikula_AbstractInstaller
     protected function listEntityClasses()
     {
         $classNames = array();
-        $classNames[] = 'Cmfcmf\OAuthModule\Entity\UserEntity';
+        $classNames[] = 'Cmfcmf\OAuthModule\Entity\MappedIdEntity';
     
         return $classNames;
     }
@@ -207,7 +207,7 @@ class OAuthModuleInstaller extends Zikula_AbstractInstaller
      */
     protected function createDefaultData($categoryRegistryIdsPerEntity)
     {
-        $entityClass = '\\Cmfcmf\\OAuthModule\\Entity\\UserEntity';
+        $entityClass = '\\Cmfcmf\\OAuthModule\\Entity\\MappedIdEntity';
         $this->entityManager->getRepository($entityClass)->truncateTable();
     }
     

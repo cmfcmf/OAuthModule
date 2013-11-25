@@ -26,7 +26,7 @@ function smarty_function_cmfcmfoauthmoduleObjectTypeSelector($params, $view)
     $dom = \ZLanguage::getModuleDomain('CmfcmfOAuthModule');
     $result = array();
 
-    $result[] = array('text' => __('Users', $dom), 'value' => 'user');
+    $result[] = array('text' => __('Mapped ids', $dom), 'value' => 'mappedId');
 
     if (array_key_exists('assign', $params)) {
         $view->assign($params['assign'], $result);

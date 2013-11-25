@@ -55,7 +55,7 @@ class SearchApi extends Zikula_AbstractApi
     
         $view = Zikula_View::getInstance($this->name);
     
-        $view->assign('active_user', (!isset($args['active_user']) || isset($args['active']['active_user'])));
+        $view->assign('active_mappedId', (!isset($args['active_mappedId']) || isset($args['active']['active_mappedId'])));
     
         return $view->fetch('Search/options.tpl');
     }
@@ -99,7 +99,7 @@ class SearchApi extends Zikula_AbstractApi
             $whereArray = array();
             $languageField = null;
             switch ($objectType) {
-                case 'user':
+                case 'mappedId':
                     $whereArray[] = 'tbl.workflowState';
                     $whereArray[] = 'tbl.claimedId';
                     $whereArray[] = 'tbl.provider';

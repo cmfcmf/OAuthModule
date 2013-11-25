@@ -15,9 +15,11 @@ namespace Cmfcmf\OAuthModule\Controller\Base;
 use Cmfcmf\OAuthModule\Util\ControllerUtil;
 use Cmfcmf\OAuthModule\Util\ModelUtil;
 use Cmfcmf\OAuthModule\Util\ViewUtil;
+use Cmfcmf\OAuthModule\Util\WorkflowUtil;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use FormUtil;
 use LogUtil;
 use ModUtil;
@@ -25,6 +27,9 @@ use SecurityUtil;
 use Zikula_AbstractController;
 use Zikula_View;
 use ZLanguage;
+use Zikula\Core\Hook\ProcessHook;
+use Zikula\Core\Hook\ValidationHook;
+use Zikula\Core\Hook\ValidationProviders;
 use Zikula\Core\ModUrl;
 use Zikula\Core\Response\PlainResponse;
 
@@ -52,12 +57,12 @@ class UserController extends Zikula_AbstractController
      *
      * @return mixed Output.
      *
-     * @throws AccessDeniedHttpException Thrown if the user doesn't have required permissions
+     * @throws AccessDeniedException Thrown if the user doesn't have required permissions
      */
     public function indexAction(Request $request)
     {
         if (!SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_OVERVIEW)) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException();
         }
         return $this->redirect(ModUtil::url($this->name, 'user', 'view'));
     }
@@ -75,20 +80,20 @@ class UserController extends Zikula_AbstractController
      *
      * @return mixed Output.
      *
-     * @throws AccessDeniedHttpException Thrown if the user doesn't have required permissions
+     * @throws AccessDeniedException Thrown if the user doesn't have required permissions
      */
     public function viewAction(Request $request)
     {
         $controllerHelper = new ControllerUtil($this->serviceManager, ModUtil::getModule($this->name));
         
         // parameter specifying which type of objects we are treating
-        $objectType = $request->query->filter('ot', 'user', false, FILTER_SANITIZE_STRING);
+        $objectType = $request->query->filter('ot', 'mappedId', false, FILTER_SANITIZE_STRING);
         $utilArgs = array('controller' => 'user', 'action' => 'view');
         if (!in_array($objectType, $controllerHelper->getObjectTypes('controllerAction', $utilArgs))) {
             $objectType = $controllerHelper->getDefaultObjectType('controllerAction', $utilArgs);
         }
         if (!SecurityUtil::checkPermission($this->name . ':' . ucwords($objectType) . ':', '::', ACCESS_READ)) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException();
         }
         $entityClass = '\\Cmfcmf\\OAuthModule\\Entity\\' . ucwords($objectType) . 'Entity';
         $repository = $this->entityManager->getRepository($entityClass);
@@ -211,6 +216,115 @@ class UserController extends Zikula_AbstractController
         
         // fetch and return the appropriate template
         return $viewHelper->processTemplate($this->view, 'user', $objectType, 'view', $request, $templateFile);
+    }
+    
+    /**
+     * This method provides a generic handling of simple delete requests.
+     *
+     * @param string  $ot           Treated object type.
+     * @param int     $id           Identifier of entity to be deleted.
+     * @param boolean $confirmation Confirm the deletion, else a confirmation page is displayed.
+     * @param string  $tpl          Name of alternative template (for alternative display options, feeds and xml output)
+     * @param boolean $raw          Optional way to display a template instead of fetching it (needed for standalone output)
+     *
+     * @return mixed Output.
+     *
+     * @throws AccessDeniedException Thrown if the user doesn't have required permissions
+     * @throws NotFoundHttpException     Thrown if item to be deleted isn't found
+     */
+    public function deleteAction(Request $request)
+    {
+        $controllerHelper = new ControllerUtil($this->serviceManager, ModUtil::getModule($this->name));
+        
+        // parameter specifying which type of objects we are treating
+        $objectType = $request->query->filter('ot', 'mappedId', false, FILTER_SANITIZE_STRING);
+        $utilArgs = array('controller' => 'user', 'action' => 'delete');
+        if (!in_array($objectType, $controllerHelper->getObjectTypes('controllerAction', $utilArgs))) {
+            $objectType = $controllerHelper->getDefaultObjectType('controllerAction', $utilArgs);
+        }
+        if (!SecurityUtil::checkPermission($this->name . ':' . ucwords($objectType) . ':', '::', ACCESS_DELETE)) {
+            throw new AccessDeniedException();
+        }
+        $idFields = ModUtil::apiFunc($this->name, 'selection', 'getIdFields', array('ot' => $objectType));
+        
+        // retrieve identifier of the object we wish to delete
+        $idValues = $controllerHelper->retrieveIdentifier($this->request, array(), $objectType, $idFields);
+        $hasIdentifier = $controllerHelper->isValidIdentifier($idValues);
+        
+        if (!$hasIdentifier) {
+            throw new NotFoundHttpException($this->__('Error! Invalid identifier received.'));
+        }
+        
+        $entity = ModUtil::apiFunc($this->name, 'selection', 'getEntity', array('ot' => $objectType, 'id' => $idValues));
+        if ($entity === null) {
+            throw new NotFoundHttpException($this->__('No such item.'));
+        }
+        
+        $entity->initWorkflow();
+        
+        $workflowHelper = new WorkflowUtil($this->serviceManager, ModUtil::getModule($this->name));
+        $deleteActionId = 'delete';
+        $deleteAllowed = false;
+        $actions = $workflowHelper->getActionsForObject($entity);
+        if ($actions === false || !is_array($actions)) {
+            throw new \RuntimeException($this->__('Error! Could not determine workflow actions.'));
+        }
+        foreach ($actions as $actionId => $action) {
+            if ($actionId != $deleteActionId) {
+                continue;
+            }
+            $deleteAllowed = true;
+            break;
+        }
+        if (!$deleteAllowed) {
+            throw new \RuntimeException($this->__('Error! It is not allowed to delete this entity.'));
+        }
+        
+        $confirmation = (bool) $this->request->request->filter('confirmation', false, false, FILTER_VALIDATE_BOOLEAN);
+        if ($confirmation) {
+            $this->checkCsrfToken();
+        
+            $hookAreaPrefix = $entity->getHookAreaPrefix();
+            $hookType = 'validate_delete';
+            // Let any hooks perform additional validation actions
+            $hook = new ValidationHook(new ValidationProviders());
+            $validators = $this->dispatchHooks($hookAreaPrefix . '.' . $hookType, $hook)->getValidators();
+            if (!$validators->hasErrors()) {
+                // execute the workflow action
+                $success = $workflowHelper->executeAction($entity, $deleteActionId);
+                if ($success) {
+                    $this->registerStatus($this->__('Done! Item deleted.'));
+                }
+        
+                // Let any hooks know that we have created, updated or deleted an item
+                $hookType = 'process_delete';
+                $hook = new ProcessHook($entity->createCompositeIdentifier());
+                $this->dispatchHooks($hookAreaPrefix . '.' . $hookType, $hook);
+        
+                // An item was deleted, so we clear all cached pages this item.
+                $cacheArgs = array('ot' => $objectType, 'item' => $entity);
+                ModUtil::apiFunc($this->name, 'cache', 'clearItemCache', $cacheArgs);
+        
+                // redirect to the list of the current object type
+                $this->redirect(ModUtil::url($this->name, 'user', 'view',
+                                                                                            array('ot' => $objectType)));
+            }
+        }
+        
+        $entityClass = '\\Cmfcmf\\OAuthModule\\Entity\\' . ucwords($objectType) . 'Entity';
+        $repository = $this->entityManager->getRepository($entityClass);
+        
+        // set caching id
+        $this->view->setCaching(Zikula_View::CACHE_DISABLED);
+        
+        // assign the object we loaded above
+        $this->view->assign($objectType, $entity)
+                   ->assign($repository->getAdditionalTemplateParameters('controllerAction', $utilArgs));
+        
+        // fetch and return the appropriate template
+        $viewHelper = new ViewUtil($this->serviceManager, ModUtil::getModule($this->name));
+        
+        return $viewHelper->processTemplate($this->view, 'user', $objectType, 'delete', $request);
     }
     
 }

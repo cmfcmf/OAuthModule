@@ -118,15 +118,15 @@ class RouterFacade
     
         if ($func == 'view') {
             switch ($objectType) {
-                case 'user':
-                            $groupFolder = 'users';
+                case 'mappedId':
+                            $groupFolder = 'mappedids';
                             break;
                 default: return '';
             }
         } else if ($func == 'display') {
             switch ($objectType) {
-                case 'user':
-                            $groupFolder = 'user';
+                case 'mappedId':
+                            $groupFolder = 'mappedid';
                             break;
                 default: return '';
             }
@@ -150,15 +150,15 @@ class RouterFacade
     
         if ($func == 'view') {
             switch ($groupFolder) {
-                case 'users':
-                            $objectType = 'user';
+                case 'mappedids':
+                            $objectType = 'mappedId';
                             break;
                 default: return '';
             }
         } else if ($func == 'display') {
             switch ($groupFolder) {
-                case 'user':
-                            $objectType = 'user';
+                case 'mappedid':
+                            $objectType = 'mappedId';
                             break;
                 default: return '';
             }
@@ -182,7 +182,7 @@ class RouterFacade
         $slug = '';
     
         switch ($objectType) {
-            case 'user':
+            case 'mappedId':
                 $slug = $itemid;
                         break;
         }

@@ -52,11 +52,11 @@ class AccountApi extends Zikula_AbstractApi
         }
     
         // Create an array of links to return
-        $objectType = 'user';
+        $objectType = 'mappedId';
         if (SecurityUtil::checkPermission($this->name . ':' . ucwords($objectType) . ':', '::', ACCESS_READ)) {
             $items[] = array(
                 'url' => ModUtil::url($this->name, 'user', 'view', array('ot' => $objectType, 'own' => 1)),
-                'title'   => $this->__('My users'),
+                'title'   => $this->__('My mapped ids'),
                 'icon'    => 'windowlist.png',
                 'module'  => 'core',
                 'set'     => 'icons/large'

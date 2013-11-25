@@ -43,11 +43,11 @@ class AdminApi extends Zikula_AbstractApi
         $utilArgs = array('api' => 'admin', 'action' => 'getlinks');
         $allowedObjectTypes = $controllerHelper->getObjectTypes('api', $utilArgs);
 
-        if (in_array('user', $allowedObjectTypes)
-            && SecurityUtil::checkPermission($this->name . ':User:', '::', ACCESS_ADMIN)) {
-            $links[] = array('url' => ModUtil::url($this->name, 'admin', 'view', array('ot' => 'user')),
-                             'text' => $this->__('Users'),
-                             'title' => $this->__('User list'));
+        if (in_array('mappedId', $allowedObjectTypes)
+            && SecurityUtil::checkPermission($this->name . ':MappedId:', '::', ACCESS_ADMIN)) {
+            $links[] = array('url' => ModUtil::url($this->name, 'admin', 'view', array('ot' => 'mappedId')),
+                             'text' => $this->__('Mapped ids'),
+                             'title' => $this->__('Mapped id list'));
         }
         if (SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
             $links[] = array('url' => ModUtil::url($this->name, 'admin', 'config'),

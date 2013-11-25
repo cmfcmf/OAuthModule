@@ -36,7 +36,7 @@ class ControllerUtil extends Zikula_AbstractBase
         }
     
         $allowedObjectTypes = array();
-        $allowedObjectTypes[] = 'user';
+        $allowedObjectTypes[] = 'mappedId';
     
         return $allowedObjectTypes;
     }
@@ -55,7 +55,7 @@ class ControllerUtil extends Zikula_AbstractBase
             $context = 'controllerAction';
         }
     
-        $defaultObjectType = 'user';
+        $defaultObjectType = 'mappedId';
     
         return $defaultObjectType;
     }
@@ -70,7 +70,7 @@ class ControllerUtil extends Zikula_AbstractBase
     public function hasCompositeKeys($objectType)
     {
         switch ($objectType) {
-            case 'user':
+            case 'mappedId':
                 return false;
                 default:
                     return false;

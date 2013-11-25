@@ -106,7 +106,7 @@ class ListEntriesUtil extends Zikula_AbstractBase
     
         $result = false;
         switch ($objectType) {
-            case 'user':
+            case 'mappedId':
                 switch ($fieldName) {
                     case 'workflowState':
                         $result = false;
@@ -135,10 +135,10 @@ class ListEntriesUtil extends Zikula_AbstractBase
     
         $entries = array();
         switch ($objectType) {
-            case 'user':
+            case 'mappedId':
                 switch ($fieldName) {
                     case 'workflowState':
-                        $entries = $this->getWorkflowStateEntriesForUser();
+                        $entries = $this->getWorkflowStateEntriesForMappedId();
                         break;
                 }
                 break;
@@ -153,7 +153,7 @@ class ListEntriesUtil extends Zikula_AbstractBase
      *
      * @return array Array with desired list entries.
      */
-    public function getWorkflowStateEntriesForUser()
+    public function getWorkflowStateEntriesForMappedId()
     {
         $states = array();
         $states[] = array('value'   => 'deferred',

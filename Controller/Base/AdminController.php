@@ -19,7 +19,7 @@ use Cmfcmf\OAuthModule\Util\ViewUtil;
 use Cmfcmf\OAuthModule\Util\WorkflowUtil;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use FormUtil;
 use LogUtil;
@@ -59,12 +59,12 @@ class AdminController extends Zikula_AbstractController
      *
      * @return mixed Output.
      *
-     * @throws AccessDeniedHttpException Thrown if the user doesn't have required permissions
+     * @throws AccessDeniedException Thrown if the user doesn't have required permissions
      */
     public function indexAction(Request $request)
     {
         if (!SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException();
         }
         return $this->redirect(ModUtil::url($this->name, 'admin', 'view'));
     }
@@ -82,20 +82,20 @@ class AdminController extends Zikula_AbstractController
      *
      * @return mixed Output.
      *
-     * @throws AccessDeniedHttpException Thrown if the user doesn't have required permissions
+     * @throws AccessDeniedException Thrown if the user doesn't have required permissions
      */
     public function viewAction(Request $request)
     {
         $controllerHelper = new ControllerUtil($this->serviceManager, ModUtil::getModule($this->name));
         
         // parameter specifying which type of objects we are treating
-        $objectType = $request->query->filter('ot', 'user', false, FILTER_SANITIZE_STRING);
+        $objectType = $request->query->filter('ot', 'mappedId', false, FILTER_SANITIZE_STRING);
         $utilArgs = array('controller' => 'admin', 'action' => 'view');
         if (!in_array($objectType, $controllerHelper->getObjectTypes('controllerAction', $utilArgs))) {
             $objectType = $controllerHelper->getDefaultObjectType('controllerAction', $utilArgs);
         }
         if (!SecurityUtil::checkPermission($this->name . ':' . ucwords($objectType) . ':', '::', ACCESS_ADMIN)) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException();
         }
         $entityClass = '\\Cmfcmf\\OAuthModule\\Entity\\' . ucwords($objectType) . 'Entity';
         $repository = $this->entityManager->getRepository($entityClass);
@@ -231,7 +231,7 @@ class AdminController extends Zikula_AbstractController
      *
      * @return mixed Output.
      *
-     * @throws AccessDeniedHttpException Thrown if the user doesn't have required permissions
+     * @throws AccessDeniedException Thrown if the user doesn't have required permissions
      * @throws NotFoundHttpException     Thrown if item to be deleted isn't found
      */
     public function deleteAction(Request $request)
@@ -239,13 +239,13 @@ class AdminController extends Zikula_AbstractController
         $controllerHelper = new ControllerUtil($this->serviceManager, ModUtil::getModule($this->name));
         
         // parameter specifying which type of objects we are treating
-        $objectType = $request->query->filter('ot', 'user', false, FILTER_SANITIZE_STRING);
+        $objectType = $request->query->filter('ot', 'mappedId', false, FILTER_SANITIZE_STRING);
         $utilArgs = array('controller' => 'admin', 'action' => 'delete');
         if (!in_array($objectType, $controllerHelper->getObjectTypes('controllerAction', $utilArgs))) {
             $objectType = $controllerHelper->getDefaultObjectType('controllerAction', $utilArgs);
         }
         if (!SecurityUtil::checkPermission($this->name . ':' . ucwords($objectType) . ':', '::', ACCESS_ADMIN)) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException();
         }
         $idFields = ModUtil::apiFunc($this->name, 'selection', 'getIdFields', array('ot' => $objectType));
         
@@ -436,12 +436,12 @@ class AdminController extends Zikula_AbstractController
      *
      * @return string Output
      *
-     * @throws AccessDeniedHttpException Thrown if the user doesn't have required permissions
+     * @throws AccessDeniedException Thrown if the user doesn't have required permissions
      */
     public function configAction()
     {
         if (!SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException();
         }
 
         // Create new Form reference

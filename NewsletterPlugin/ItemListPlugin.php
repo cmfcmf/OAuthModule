@@ -27,7 +27,7 @@ class ItemListPlugin extends Newsletter_AbstractPlugin
      */
     public function getTitle()
     {
-        return $this->__('Latest users');
+        return $this->__('Latest mapped ids');
     }
     
     /**
@@ -37,7 +37,7 @@ class ItemListPlugin extends Newsletter_AbstractPlugin
      */
     public function getDisplayName()
     {
-        return $this->__('List of users');
+        return $this->__('List of mapped ids');
     }
     
     /**
@@ -47,7 +47,7 @@ class ItemListPlugin extends Newsletter_AbstractPlugin
      */
     public function getDescription()
     {
-        return $this->__('This plugin shows a list of users of the CmfcmfOAuthModule module.');
+        return $this->__('This plugin shows a list of mapped ids of the CmfcmfOAuthModule module.');
     }
     
     /**
@@ -70,7 +70,7 @@ class ItemListPlugin extends Newsletter_AbstractPlugin
     {
         $objectTypes = array();
         if (ModUtil::available($this->modname) && ModUtil::loadApi($this->modname)) {
-            $objectTypes['user'] = array('name' => $this->__('Users'));
+            $objectTypes['mappedId'] = array('name' => $this->__('Mapped ids'));
         }
     
         $active = $this->getPluginVar('ObjectTypes', array());

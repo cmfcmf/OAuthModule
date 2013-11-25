@@ -48,7 +48,7 @@ class ModelUtil extends Zikula_AbstractBase
         $result = false;
     
         switch ($objectType) {
-            case 'user':
+            case 'mappedId':
                 $result = true;
                 break;
         }

@@ -3,7 +3,7 @@
     <label for="cmfcmfOAuthModuleObjectType" class="col-lg-3 control-label">{gt text='Object type'}:</label>
     <div class="col-lg-9">
         <select id="cmfcmfOAuthModuleObjectType" name="objecttype" size="1" class="form-control">
-            <option value="user"{if $objectType eq 'user'} selected="selected"{/if}>{gt text='Users'}</option>
+            <option value="mappedId"{if $objectType eq 'mappedId'} selected="selected"{/if}>{gt text='Mapped ids'}</option>
         </select>
         <span class="help-block">{gt text='If you change this please save the block once to reload the parameters below.'}</span>
     </div>

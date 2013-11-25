@@ -138,7 +138,7 @@ class ItemSelector extends Zikula_Form_Plugin_TextInput
     public function decode(Zikula_Form_View $view)
     {
         parent::decode($view);
-        $this->objectType = FormUtil::getPassedValue('CmfcmfOAuthModule_objecttype', 'user', 'POST');
+        $this->objectType = FormUtil::getPassedValue('CmfcmfOAuthModule_objecttype', 'mappedId', 'POST');
         $this->selectedItemId = $this->text;
     }
 }

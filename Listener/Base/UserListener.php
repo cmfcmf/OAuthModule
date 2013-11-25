@@ -84,15 +84,15 @@ class UserListener
         $serviceManager = ServiceUtil::getManager();
         $entityManager = $serviceManager->getService('doctrine.entitymanager');
         
-        $repo = $entityManager->getRepository('Cmfcmf\OAuthModule\Entity\UserEntity');
-        // delete all users created by this user
+        $repo = $entityManager->getRepository('Cmfcmf\OAuthModule\Entity\MappedIdEntity');
+        // delete all mapped ids created by this user
         $repo->deleteCreator($uid);
         // note you could also do: $repo->updateCreator($uid, 2);
         
-        // set last editor to admin (2) for all users updated by this user
+        // set last editor to admin (2) for all mapped ids updated by this user
         $repo->updateLastEditor($uid, 2);
         // note you could also do: $repo->deleteLastEditor($uid);
-        // set user id to guest (1) for all affected users
+        // set user id to guest (1) for all affected mapped ids
         $repo->updateUserField('userId', $uid, 1);
     }
 }

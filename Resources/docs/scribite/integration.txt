@@ -2,7 +2,7 @@ SCRIBITE INTEGRATION
 --------------------
 
 It is easy to include CmfcmfOAuthModule in your Scribite editors.
-While CmfcmfOAuthModule contains already the a popup for selecting users and other items,
+While CmfcmfOAuthModule contains already the a popup for selecting mapped ids and other items,
 the actual Scribite enhancements must be done manually for Scribite <= 4.3.
 From Scribite 5.0 onwards the integration is automatic. The necessary javascript is loaded via event system and the
 plugins are already in the Scribite package.

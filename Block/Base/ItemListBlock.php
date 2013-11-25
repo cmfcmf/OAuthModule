@@ -84,7 +84,7 @@ class ItemListBlock extends Zikula_Controller_AbstractBlock
     
         // set default values for all params which are not properly set
         if (!isset($vars['objectType']) || empty($vars['objectType'])) {
-            $vars['objectType'] = 'user';
+            $vars['objectType'] = 'mappedId';
         }
         if (!isset($vars['sorting']) || empty($vars['sorting'])) {
             $vars['sorting'] = 'default';
@@ -247,7 +247,7 @@ class ItemListBlock extends Zikula_Controller_AbstractBlock
     
         // set default values for all params which are not properly set
         if (!isset($vars['objectType']) || empty($vars['objectType'])) {
-            $vars['objectType'] = 'user';
+            $vars['objectType'] = 'mappedId';
         }
         if (!isset($vars['sorting']) || empty($vars['sorting'])) {
             $vars['sorting'] = 'default';
@@ -292,7 +292,7 @@ class ItemListBlock extends Zikula_Controller_AbstractBlock
         // Get current content
         $vars = BlockUtil::varsFromContent($blockinfo['content']);
     
-        $vars['objectType'] = $this->request->request->filter('objecttype', 'user', false, FILTER_SANITIZE_STRING);
+        $vars['objectType'] = $this->request->request->filter('objecttype', 'mappedId', false, FILTER_SANITIZE_STRING);
         $vars['sorting'] = $this->request->request->filter('sorting', 'default', false, FILTER_SANITIZE_STRING);
         $vars['amount'] = (int) $this->request->request->filter('amount', 5, false, FILTER_VALIDATE_INT);
         $vars['template'] = $this->request->request->get('template', '');

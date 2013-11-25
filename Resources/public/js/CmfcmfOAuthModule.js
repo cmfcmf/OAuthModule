@@ -100,7 +100,7 @@ function oauthInitQuickNavigation(objectType, controller)
     }
 
     switch (objectType) {
-    case 'user':
+    case 'mappedId':
         if ($('workflowState') != undefined) {
             $('workflowState').observe('change', function () { oauthSubmitQuickNavForm(objectType); });
         }

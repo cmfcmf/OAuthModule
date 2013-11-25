@@ -293,7 +293,7 @@ class ItemList extends \Content_AbstractContentType
      */
     public function getDefaultData()
     {
-        return array('objectType' => 'user',
+        return array('objectType' => 'mappedId',
                      'sorting' => 'default',
                      'amount' => 1,
                      'template' => 'itemlist_display.tpl',

@@ -79,7 +79,7 @@ class WorkflowUtil extends Zikula_AbstractBase
     {
         $result = '';
         switch ($objectType) {
-            case 'user':
+            case 'mappedId':
                 $result = 'none';
                 break;
         }
