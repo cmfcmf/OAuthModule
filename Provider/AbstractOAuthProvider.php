@@ -12,9 +12,12 @@
 namespace Cmfcmf\OAuthModule\Provider;
 
 use OAuth\Common\Consumer\Credentials;
+use OAuth\Common\Http\Client\CurlClient;
+use OAuth\Common\Http\Client\StreamClient;
 use OAuth\Common\Storage\Session;
 use OAuth\Common\Storage\SymfonySession;
 use OAuth\Common\Storage\TokenStorageInterface;
+use OAuth\Common\Token\AbstractToken;
 use OAuth\Common\Token\TokenInterface;
 use OAuth\OAuth1\Token\StdOAuth1Token;
 use OAuth\ServiceFactory;
@@ -33,11 +36,22 @@ abstract class AbstractOAuthProvider implements Zikula_TranslatableInterface
     protected $domain;
 
     /**
+     * @var bool Whether to use curl or file_get_contents().
+     */
+    protected $useCurl;
+
+    /**
+     * @var \OAuth\Common\Service\ServiceInterface The OAuth service of this provider.
+     */
+    protected $service;
+
+    /**
      * Builds a new instance of this class, and sets the translation domain.
      */
     public final function __construct()
     {
         $this->domain = ZLanguage::getModuleDomain('CmfcmfOAuthModule');
+        $this->useCurl = function_exists('curl_version');
     }
 
     /**
@@ -48,13 +62,22 @@ abstract class AbstractOAuthProvider implements Zikula_TranslatableInterface
     abstract public function getScopesMinimum();
 
     /**
+     * This method extracts the user's password equivalent (claimed id) from the response token.
+     *
+     * @param TokenInterface $token
+     *
+     * @return string The user's password equivalent (claimed id).
+     */
+    abstract public function extractClaimedIdFromToken(TokenInterface $token);
+
+    /**
      * Return an array of scopes needed for login to make it as good as possible, defaults to $this->getScopesMinimum().
      *
      * @return array The array of scopes.
      */
     public function getScopesMaximum()
     {
-        $this->getScopesMinimum();
+        return $this->getScopesMinimum();
     }
 
     /**
@@ -101,7 +124,7 @@ abstract class AbstractOAuthProvider implements Zikula_TranslatableInterface
     /**
      * Get further information about the user from $service.
      *
-     * @param \OAuth\Common\Service\AbstractService $service
+     * @internal param \OAuth\Common\Service\AbstractService $service
      *
      * @return array Further information extracted from service.
      *
@@ -113,9 +136,22 @@ abstract class AbstractOAuthProvider implements Zikula_TranslatableInterface
      * email address is in use already.
      * - 'lang': The user's preferred language.
      */
-    public function getAdditionalInformationForRegistration($service)
+    public function getAdditionalInformationForRegistration()
     {
         unset($service);
+        return array();
+    }
+
+    /**
+     * Get further arguments to add to the redirect url.
+     *
+     * @param bool $forRegistration
+     *
+     * @return array The arguments to add.
+     */
+    public function getAdditionalRedirectUrlArguments($forRegistration = false)
+    {
+        unset($forRegistration);
         return array();
     }
 
@@ -160,6 +196,18 @@ abstract class AbstractOAuthProvider implements Zikula_TranslatableInterface
     }
 
     /**
+     * Forms the user name to match the Zikula user name pattern.
+     *
+     * @param string $raw The raw user name
+     *
+     * @return string The sanitized user name.
+     */
+    public function sanitizeUname($raw)
+    {
+        return mb_strtolower(str_replace(' ', '-', $raw));
+    }
+
+    /**
      * Creates a new service using the given $strorage, $scopes and $reentrantURL.
      *
      * @param TokenStorageInterface $storage      The storage to be used.
@@ -173,6 +221,7 @@ abstract class AbstractOAuthProvider implements Zikula_TranslatableInterface
     {
         /** @var $serviceFactory ServiceFactory An OAuth service factory. */
         $serviceFactory = new ServiceFactory();
+        $serviceFactory->setHttpClient(($this->useCurl) ? new CurlClient() : new StreamClient());
 
         $credentials = $this->getCredentials();
 
@@ -187,7 +236,9 @@ abstract class AbstractOAuthProvider implements Zikula_TranslatableInterface
             $reentrantURL
         );
 
-        return $serviceFactory->createService($this->getOAuthServiceName(), $credentials, $storage, $scopes);
+        $this->service = $serviceFactory->createService($this->getOAuthServiceName(), $credentials, $storage, $scopes);
+
+        return $this->service;
     }
 
     /**

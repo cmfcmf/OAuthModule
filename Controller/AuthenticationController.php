@@ -51,7 +51,7 @@ class AuthenticationController extends Zikula_Controller_AbstractAuthentication
      * @throws \InvalidArgumentException If the $args array or any parameter it contains is invalid;
      * @throws FatalErrorException If a template cannot be found for the method and the specified form type.
      */
-    public function getLoginFormFields(array $args)
+    public function getLoginFormFieldsAction(array $args)
     {
         // Parameter extraction and error checking
         $genericErrorMessage = $this->__('An internal error has occurred while selecting a method of logging in.');
@@ -157,7 +157,7 @@ class AuthenticationController extends Zikula_Controller_AbstractAuthentication
      *
      * @throws \InvalidArgumentException If $args are not valid.
      */
-    public function validateAuthenticationInformation(array $args)
+    public function validateAuthenticationInformationAction(array $args)
     {
         if (!isset($args['authenticationMethod']) || !isset($args['authenticationInfo'])) {
             throw new \InvalidArgumentException($this->__('Error: An invalid \'$args\' parameter was received.'));

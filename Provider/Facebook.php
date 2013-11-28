@@ -57,13 +57,9 @@ class Facebook extends AbstractOAuth2Provider
     /**
      * {@inheritdoc}
      *
-     * @param \OAuth\OAuth2\Service\Facebook  $facebook
-     *
-     * @return array
-     *
      * @todo To be implemented!
      */
-    public function getAdditionalInformationForRegistration($facebook)
+    public function getAdditionalInformationForRegistration()
     {
         try {
             return array();

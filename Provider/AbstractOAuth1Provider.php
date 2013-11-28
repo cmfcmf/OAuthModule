@@ -19,15 +19,6 @@ use OAuth\OAuth1\Token\StdOAuth1Token;
 abstract class AbstractOAuth1Provider extends AbstractOAuthProvider
 {
     /**
-     * This method extracts the user's password equivalent (claimed id) from the response token.
-     *
-     * @param StdOAuth1Token $token
-     *
-     * @return string The user's password equivalent (claimed id).
-     */
-    abstract public function extractClaimedIdFromToken(StdOAuth1Token $token);
-
-    /**
      * {@inheritdoc}
      */
     public function getScopesMinimum()

@@ -20,23 +20,12 @@ function CmfcmfOAuthModule_workflow_none_permissioncheck($obj, $permLevel, $curr
     $result = CmfcmfOAuthModule_workflow_none_permissioncheck_base($obj, $permLevel, $currentUser, $actionId);
 
     if (!$result) {
-        // Recheck permission with the user id of the user in the 'userId' field. This is needed for
-        // creating during registration, because the user is not logged in at this point.
-        $objectType = $obj['_objectType'];
-        $component = 'CmfcmfOAuthModule:' . ucwords($objectType) . ':';
-
-        // calculate the permission instance
-        $idFields = ModUtil::apiFunc('CmfcmfOAuthModule', 'selection', 'getIdFields', array('ot' => $objectType));
-        $instanceId = '';
-        foreach ($idFields as $idField) {
-            if (!empty($instanceId)) {
-                $instanceId .= '_';
-            }
-            $instanceId .= $obj[$idField];
+        // Recheck permission if the user id of the user in the 'userId' field is not equal to the user id of the
+        // current user. This is needed for creating during registration, because the user is not logged in at this
+        // point.
+        if ($actionId == 'submit' && $currentUser == -1 && $obj->getUserId() != -1) {
+            $result = true;
         }
-        $instance = $instanceId . '::';
-
-        $result = SecurityUtil::checkPermission($component, $instance, $permLevel, $obj['userId']);
     }
 
     if ($actionId == 'delete' && $result) {

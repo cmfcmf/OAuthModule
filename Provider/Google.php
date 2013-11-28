@@ -11,6 +11,15 @@
 
 namespace Cmfcmf\OAuthModule\Provider;
 
+use OAuth\Common\Http\Client\CurlClient;
+use OAuth\Common\Http\Client\StreamClient;
+use OAuth\Common\Token\TokenInterface;
+use OAuth\ServiceFactory;
+use OAuth\Common\Consumer\Credentials;
+use OAuth\Common\Storage\TokenStorageInterface;
+use Symfony\Component\Debug\Exception\FatalErrorException;
+use OAuth\OAuth2\Service\Google as GoogleService;
+
 /**
  * The Google OAuth.2 provider class.
  */
@@ -37,7 +46,7 @@ class Google extends AbstractOAuth2Provider
      */
     public function getScopesMinimum()
     {
-        return array('https://www.googleapis.com/auth/userinfo.email');
+        return array(GoogleService::SCOPE_USERINFO_EMAIL);
     }
 
     /**
@@ -45,22 +54,35 @@ class Google extends AbstractOAuth2Provider
      */
     public function getScopesMaximum()
     {
-        return array('https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile');
+        return array(GoogleService::SCOPE_USERINFO_EMAIL, GoogleService::SCOPE_USERINFO_PROFILE);
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @param \OAuth\OAuth2\Service\Google  $google
-     *
-     * @return array
-     *
-     * @todo To be implemented!!
      */
-    public function getAdditionalInformationForRegistration($google)
+    public function extractClaimedIdFromToken(TokenInterface $token)
+    {
+        unset($token);
+        $result = json_decode($this->service->request('https://www.googleapis.com/oauth2/v1/userinfo'), true);
+
+        return $result['id'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAdditionalInformationForRegistration()
     {
         try {
-            return array();
+            $result = json_decode($this->service->request('https://www.googleapis.com/oauth2/v3/userinfo'), true);
+
+            return array(
+                'uname' => $this->sanitizeUname($result['name']),
+                'email' => $result['email'],
+                'hideEmail' => true,
+                'emailVerified' => $result['email_verified'] === "true",
+                'lang' => $result['locale']
+            );
         } catch (\Exception $e) {
             // Catch anything.
             return array();

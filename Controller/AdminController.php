@@ -17,7 +17,7 @@ use ModUtil;
 use SecurityUtil;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * This is the Admin controller class providing navigation and interaction functionality.
@@ -33,8 +33,10 @@ class AdminController extends BaseAdminController
      */
     public function indexAction(Request $request)
     {
+        unset($request);
+
         if (!SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
-            throw new AccessDeniedHttpException();
+            throw new AccessDeniedException();
         }
         return new RedirectResponse(ModUtil::url($this->name, 'admin', 'config'));
     }

@@ -14,7 +14,7 @@ namespace Cmfcmf\OAuthModule\Provider;
 use OAuth\OAuth2\Service\GitHub as GitHubService;
 
 /**
- * The Github OAuth.2 provider class.
+ * The GitHub OAuth.2 provider class.
  */
 class Github extends AbstractOAuth2Provider
 {
@@ -61,19 +61,15 @@ class Github extends AbstractOAuth2Provider
     /**
      * {@inheritdoc}
      *
-     * @param \OAuth\OAuth2\Service\GitHub  $github
-     *
-     * @return array
-     *
      * Fetches the user's email address and GitHub user name.
      */
-    public function getAdditionalInformationForRegistration($github)
+    public function getAdditionalInformationForRegistration()
     {
         try {
-            $result = json_decode($github->request('user/emails'), true);
+            $result = json_decode($this->service->request('user/emails'), true);
             $email = $result[0];
 
-            $result = json_decode($github->request('user'), true);
+            $result = json_decode($this->service->request('user'), true);
             $uname = $result['login'];
 
             return array('email' => $email, 'hideEmail' => true, 'uname' => $uname);

@@ -23,6 +23,8 @@ use ModUtil;
 use ServiceUtil;
 use SessionUtil;
 use Symfony\Component\Debug\Exception\FatalErrorException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use System;
 use Zikula_Api_AbstractAuthentication;
 use Cmfcmf\OAuthModule\Util\ProviderUtil;
@@ -310,7 +312,7 @@ class AuthenticationApi extends Zikula_Api_AbstractAuthentication
                 $mappedId->setCreatedUserId($uid);
                 $mappedId->setUpdatedUserId($uid);
 
-                $workflowHelper->executeAction($mappedId, 'submitŝ');
+                $workflowHelper->executeAction($mappedId, 'submit');
                 return true;
             } catch (\Exception $e) {
                 return false;
@@ -401,7 +403,7 @@ class AuthenticationApi extends Zikula_Api_AbstractAuthentication
         if ($code || $error || $oAuthToken || $oAuthVerifier) {
             $reentrantURL = $this->request->getSession()->get('reentrant_url', '', 'OAuth_Authentication_checkPassword');
 
-            if ($reentrantURL != $state) {
+            if ($reentrantURL != $state && $oAuthType === 2) {
                 return LogUtil::registerError($this->__('Something went wrong during the authentication process.'));
             }
 
@@ -420,21 +422,21 @@ class AuthenticationApi extends Zikula_Api_AbstractAuthentication
                         $oAuthVerifier,
                         $token->getRequestTokenSecret()
                     );
-                    $claimedId = $OAuthHelper->extractClaimedIdFromToken($token);
                 } else {
                     // OAuth 2
                     /** @var \OAuth\Common\Token\TokenInterface $token */
                     /** @var \OAuth\OAuth2\Service\AbstractService $service */
                     $token = $service->requestAccessToken($code);
-                    $claimedId = $token->getAccessToken();
                 }
+
+                $claimedId = $OAuthHelper->extractClaimedIdFromToken($token);
 
                 $returnResult = array(
                     'claimed_id' => $claimedId
                 );
 
                 if ($forRegistration) {
-                    $returnResult = array_merge($returnResult, $OAuthHelper->getAdditionalInformationForRegistration($service));
+                    $returnResult = array_merge($returnResult, $OAuthHelper->getAdditionalInformationForRegistration());
                 }
 
                 // Cache result.
@@ -461,11 +463,15 @@ class AuthenticationApi extends Zikula_Api_AbstractAuthentication
                 // OAuth 1
                 /** @var \OAuth\OAuth1\Service\AbstractService $service */
                 $token = $service->requestRequestToken();
-                $url = $service->getAuthorizationUri(array('oauth_token' => $token->getRequestToken()));
+                $urlArgs = array('oauth_token' => $token->getRequestToken() /*, 'state' => $reentrantURL*/);
             } else {
                 // OAuth 2
-                $url = $service->getAuthorizationUri(array('state' => $reentrantURL));
+                $urlArgs = array('state' => $reentrantURL);
             }
+
+            $urlArgs = array_merge($urlArgs, $OAuthHelper->getAdditionalRedirectUrlArguments($forRegistration));
+            $url = $service->getAuthorizationUri($urlArgs);
+
             header('Location: ' . $url);
             exit;
         }

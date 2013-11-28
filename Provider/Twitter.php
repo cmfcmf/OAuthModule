@@ -11,7 +11,7 @@
 
 namespace Cmfcmf\OAuthModule\Provider;
 
-use OAuth\OAuth1\Token\StdOAuth1Token;
+use OAuth\Common\Token\TokenInterface;
 
 /**
  * The Twitter OAuth 2 provider class.
@@ -36,8 +36,11 @@ class Twitter extends AbstractOAuth1Provider
 
     /**
      * {@inheritdoc}
+     * @param TokenInterface $token
+     *
+     * @return string
      */
-    public function extractClaimedIdFromToken(StdOAuth1Token $token)
+    public function extractClaimedIdFromToken(TokenInterface $token)
     {
         $params = $token->getExtraParams();
 
@@ -47,14 +50,12 @@ class Twitter extends AbstractOAuth1Provider
     /**
      * {@inheritdoc}
      *
-     * @param \OAuth\OAuth1\Service\Twitter $twitter
-     *
      * @note Twitter does NOT provide the user's email address.
      */
-    public function getAdditionalInformationForRegistration($twitter)
+    public function getAdditionalInformationForRegistration()
     {
         try {
-            $result = json_decode($twitter->request('account/settings.json'), true);
+            $result = json_decode($this->service->request('account/settings.json'), true);
             $uname = $result['screen_name'];
             $lang = $result['language'];
 
