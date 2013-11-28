@@ -12,10 +12,10 @@
 namespace Cmfcmf\OAuthModule\Controller;
 
 use Cmfcmf\OAuthModule\Helper\Builder;
+use SecurityUtil;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 use System;
 use Zikula_Controller_AbstractAuthentication;
-use Zikula_Exception_Fatal;
 
 /**
  * Provides access to administrative initiated actions for the OAuth module.
