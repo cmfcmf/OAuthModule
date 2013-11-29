@@ -206,7 +206,7 @@ class ViewUtil extends Zikula_AbstractBase
         // if ($_GET['dbg'] == 1) die($output);
     
         // instantiate pdf object
-        $pdf = new DOMPDF();
+        $pdf = new \DOMPDF();
         // define page properties
         $pdf->set_paper('A4');
         // load html input data

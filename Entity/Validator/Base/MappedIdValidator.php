@@ -15,6 +15,7 @@ namespace Cmfcmf\OAuthModule\Entity\Validator\Base;
 use Cmfcmf\OAuthModule\AbstractValidator as BaseAbstractValidator;
 
 use ServiceUtil;
+use Zikula_EntityAccess;
 use ZLanguage;
 
 /**

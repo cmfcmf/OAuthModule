@@ -12,7 +12,7 @@
 
 namespace Cmfcmf\OAuthModule\Form\Plugin\Base;
 
-use ModUtil;
+use FormUtil;
 use PageUtil;
 use SecurityUtil;
 use ServiceUtil;
