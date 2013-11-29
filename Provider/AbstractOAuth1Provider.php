@@ -11,10 +11,8 @@
 
 namespace Cmfcmf\OAuthModule\Provider;
 
-use OAuth\OAuth1\Token\StdOAuth1Token;
-
 /**
- * AbstractOAuth1Provider.Class used for every OAuth 1 provider.
+ * AbstractOAuth1Provider Class used for every OAuth 1 provider.
  */
 abstract class AbstractOAuth1Provider extends AbstractOAuthProvider
 {

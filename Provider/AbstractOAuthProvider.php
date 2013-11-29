@@ -124,8 +124,6 @@ abstract class AbstractOAuthProvider implements Zikula_TranslatableInterface
     /**
      * Get further information about the user from $service.
      *
-     * @internal param \OAuth\Common\Service\AbstractService $service
-     *
      * @return array Further information extracted from service.
      *
      * Possible extracted information:
@@ -134,11 +132,12 @@ abstract class AbstractOAuthProvider implements Zikula_TranslatableInterface
      * - 'hideEmail': Whether to hide the email address fields during registration. This does NOT mean the email cannot
      * be changed. It will be hidden only and still can be changed by the user. Maybe it even must be changed, if the
      * email address is in use already.
+     * - 'emailVerified': If the email address does not need validation. Note that the email address still could be
+     * changed by the user, in this case validation will be re-enabled.
      * - 'lang': The user's preferred language.
      */
     public function getAdditionalInformationForRegistration()
     {
-        unset($service);
         return array();
     }
 
