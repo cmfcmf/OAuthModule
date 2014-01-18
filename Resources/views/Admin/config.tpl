@@ -45,6 +45,27 @@
                             <div class="alert alert-info">{gt text="Why should you disable this feature? Users might be feared, because it often isn't possible to specify which data we want exactly. Basically we are interested in the user's email address, his nickname and his language. But for most of the providers you cannot request only those, but potentially get much more information than needed. The user now may ask why your site want's that much information. But why should you enable this? For some providers, this really means a two-click-only account registration on your site, which is very fast and easy for new users."}</div>
                         </div>
                     </div>
+                    <div class="form-group">
+                        {formlabel for='curlUseOwnCert' __text='Path to a curl certificate, if your server has not one by default' cssClass=' col-lg-3 control-label'}
+                        <div class="col-lg-9">
+                            {formtextinput id='curlUseOwnCert' group='config' maxLength=1000 cssClass="form-control"}
+                            <div class="alert alert-info">
+                                {gt text='Leave this empty, if you do not receive an expception when using Twitter or Google. If you do so, the problem might be related to missing certificates. Quote from the offcial website of the cURL library:'}<br />
+                                <blockquote>
+                                    <i>
+                                        {gt text="Until 7.18.0, curl bundled a severely outdated ca bundle file that was installed by default. These days, the curl archives include no ca certs at all. You need to get them elsewhere."}
+                                    </i>
+                                    <small>
+                                        <cite title="http://curl.haxx.se/docs/sslcerts.html">
+                                            <a href="http://curl.haxx.se/docs/sslcerts.html" title="{gt text='Source'}">http://curl.haxx.se/docs/sslcerts.html</a>
+                                        </cite>
+                                    </small>
+                                </blockquote>
+                                {gt text='By default, your server hoster should take care of this issue. If the issue remains, enter a valid file path starting at SERVER root (not Zikula root) pointing to a valida certificates file. If such a file is not present on your server, you can either download one from the url below or use the one bundled with this module (which might be outdated). The path to the certificate file bundled with this module is as follows: %s' tag1=$pathToBundledCurlCertificate}<br />
+                                <a href="http://curl.haxx.se/docs/caextract.html">http://curl.haxx.se/docs/caextract.html</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 {foreach from=$providers item='provider'}
                     <div class="tab-pane fade" id="tab{$provider->getProviderName()}">

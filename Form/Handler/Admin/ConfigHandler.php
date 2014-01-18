@@ -41,6 +41,7 @@ class ConfigHandler extends BaseConfigHandler
         $providers = ProviderUtil::getAllOAuthProvider();
         $view->assign('providers', $providers);
         $view->assign('autocompleteAttribute', array('autocomplete' => 'off'));
+        $view->assign('pathToBundledCurlCertificate', \DataUtil::formatForOS(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "Resources" . DIRECTORY_SEPARATOR . "extra" . DIRECTORY_SEPARATOR . "cacert.pem", true));
         return parent::initialize($view);
     }
 

@@ -220,7 +220,18 @@ abstract class AbstractOAuthProvider implements Zikula_TranslatableInterface
     {
         /** @var $serviceFactory ServiceFactory An OAuth service factory. */
         $serviceFactory = new ServiceFactory();
-        $serviceFactory->setHttpClient(($this->useCurl) ? new CurlClient() : new StreamClient());
+        if ($this->useCurl) {
+            $client = new CurlClient();
+            $curlUseOwnCert = \ModUtil::getVar('CmfcmfOAuthModule', 'curlUseOwnCert', false);
+            if (!empty($curlUseOwnCert)) {
+                $path = $curlUseOwnCert;
+                $client->setCurlParameters(array(CURLOPT_CAINFO => $path));
+            }
+        } else {
+            $client = new StreamClient();
+        }
+
+        $serviceFactory->setHttpClient($client);
 
         $credentials = $this->getCredentials();
 
