@@ -95,4 +95,17 @@ class UserListener
         // set user id to guest (1) for all affected mapped ids
         $repo->updateUserField('userId', $uid, 1);
     }
+    
+    /**
+     * Makes our handlers known to the event system.
+     */
+    public static function getSubscribedEvents()
+    {
+        return array(
+            'user.gettheme'         => array('getTheme', 5),
+            'user.account.create'   => array('create', 5),
+            'user.account.update'   => array('update', 5),
+            'user.account.delete'   => array('delete', 5)
+        );
+    }
 }

@@ -33,4 +33,14 @@ class UserLogoutListener
     public static function succeeded(GenericEvent $event)
     {
     }
+    
+    /**
+     * Makes our handlers known to the event system.
+     */
+    public static function getSubscribedEvents()
+    {
+        return array(
+            'module.users.ui.logout.succeeded' => array('succeeded', 5)
+        );
+    }
 }

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+    
+        <parameter key="cmfcmfoauthmodule.core_listener.class">Cmfcmf\OAuthModule\Listener\CoreListener</parameter>
+        <parameter key="cmfcmfoauthmodule.frontcontroller_listener.class">Cmfcmf\OAuthModule\Listener\FrontControllerListener</parameter>
+        <parameter key="cmfcmfoauthmodule.installer_listener.class">Cmfcmf\OAuthModule\Listener\InstallerListener</parameter>
+        <parameter key="cmfcmfoauthmodule.moduledispatch_listener.class">Cmfcmf\OAuthModule\Listener\ModuleDispatchListener</parameter>
+        <parameter key="cmfcmfoauthmodule.mailer_listener.class">Cmfcmf\OAuthModule\Listener\MailerListener</parameter>
+        <parameter key="cmfcmfoauthmodule.page_listener.class">Cmfcmf\OAuthModule\Listener\PageListener</parameter>
+        <parameter key="cmfcmfoauthmodule.theme_listener.class">Cmfcmf\OAuthModule\Listener\ThemeListener</parameter>
+        <parameter key="cmfcmfoauthmodule.view_listener.class">Cmfcmf\OAuthModule\Listener\ViewListener</parameter>
+        <parameter key="cmfcmfoauthmodule.userlogin_listener.class">Cmfcmf\OAuthModule\Listener\UserLoginListener</parameter>
+        <parameter key="cmfcmfoauthmodule.userlogout_listener.class">Cmfcmf\OAuthModule\Listener\UserLogoutListener</parameter>
+        <parameter key="cmfcmfoauthmodule.user_listener.class">Cmfcmf\OAuthModule\Listener\UserListener</parameter>
+        <parameter key="cmfcmfoauthmodule.userregistration_listener.class">Cmfcmf\OAuthModule\Listener\UserRegistrationListener</parameter>
+        <parameter key="cmfcmfoauthmodule.users_listener.class">Cmfcmf\OAuthModule\Listener\UsersListener</parameter>
+        <parameter key="cmfcmfoauthmodule.group_listener.class">Cmfcmf\OAuthModule\Listener\GroupListener</parameter>
+        <parameter key="cmfcmfoauthmodule.thirdparty_listener.class">Cmfcmf\OAuthModule\Listener\ThirdPartyListener</parameter>
+    </parameters>
+    <services>
+    
+        <!-- core related events -->
+        <service id="cmfcmfoauthmodule.core_listener" class="%cmfcmfoauthmodule.core_listener.class%">
+            <tag name="kernel.event_subscriber" />
+        </service>
+    
+        <!-- front controller -->
+        <service id="cmfcmfoauthmodule.frontcontroller_listener" class="%cmfcmfoauthmodule.frontcontroller_listener.class%">
+            <tag name="kernel.event_subscriber" />
+        </service>
+    
+        <!-- installer -->
+        <service id="cmfcmfoauthmodule.installer_listener" class="%cmfcmfoauthmodule.installer_listener.class%">
+            <tag name="kernel.event_subscriber" />
+        </service>
+    
+        <!-- module dispatching -->
+        <service id="cmfcmfoauthmodule.moduledispatch_listener" class="%cmfcmfoauthmodule.moduledispatch_listener.class%">
+            <tag name="kernel.event_subscriber" />
+        </service>
+    
+        <!-- mailer -->
+        <service id="cmfcmfoauthmodule.mailer_listener" class="%cmfcmfoauthmodule.mailer_listener.class%">
+            <tag name="kernel.event_subscriber" />
+        </service>
+    
+        <!-- page -->
+        <service id="cmfcmfoauthmodule.page_listener" class="%cmfcmfoauthmodule.page_listener.class%">
+            <tag name="kernel.event_subscriber" />
+        </service>
+    
+        <!-- theme -->
+        <service id="cmfcmfoauthmodule.theme_listener" class="%cmfcmfoauthmodule.theme_listener.class%">
+            <tag name="kernel.event_subscriber" />
+        </service>
+    
+        <!-- view -->
+        <service id="cmfcmfoauthmodule.view_listener" class="%cmfcmfoauthmodule.view_listener.class%">
+            <tag name="kernel.event_subscriber" />
+        </service>
+    
+        <!-- user login -->
+        <service id="cmfcmfoauthmodule.userlogin_listener" class="%cmfcmfoauthmodule.userlogin_listener.class%">
+            <tag name="kernel.event_subscriber" />
+        </service>
+    
+        <!-- user logout -->
+        <service id="cmfcmfoauthmodule.userlogout_listener" class="%cmfcmfoauthmodule.userlogout_listener.class%">
+            <tag name="kernel.event_subscriber" />
+        </service>
+    
+        <!-- user -->
+        <service id="cmfcmfoauthmodule.user_listener" class="%cmfcmfoauthmodule.user_listener.class%">
+            <tag name="kernel.event_subscriber" />
+        </service>
+    
+        <!-- registration -->
+        <service id="cmfcmfoauthmodule.userregistration_listener" class="%cmfcmfoauthmodule.userregistration_listener.class%">
+            <tag name="kernel.event_subscriber" />
+        </service>
+    
+        <!-- users module -->
+        <service id="cmfcmfoauthmodule.users_listener" class="%cmfcmfoauthmodule.users_listener.class%">
+            <tag name="kernel.event_subscriber" />
+        </service>
+    
+        <!-- group -->
+        <service id="cmfcmfoauthmodule.group_listener" class="%cmfcmfoauthmodule.group_listener.class%">
+            <tag name="kernel.event_subscriber" />
+        </service>
+    
+        <!-- special purposes and 3rd party api support -->
+        <service id="cmfcmfoauthmodule.thirdparty_listener" class="%cmfcmfoauthmodule.thirdparty_listener.class%">
+            <tag name="kernel.event_subscriber" />
+        </service>
+    
+    </services>
+</workflow>

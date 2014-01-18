@@ -61,8 +61,8 @@
         {/if}
         {if !isset($pageSizeSelector) || $pageSizeSelector eq true}
             <div class="form-group">
-                <label for="num" class="form-control input-sm" style="min-width: 70px">{gt text='Page size'}</label>
-                <select id="num" name="num">
+                <label for="num">{gt text='Page size'}</label>
+                <select id="num" name="num" class="form-control input-sm" style="min-width: 70px">
                     <option value="5"{if $pageSize eq 5} selected="selected"{/if}>5</option>
                     <option value="10"{if $pageSize eq 10} selected="selected"{/if}>10</option>
                     <option value="15"{if $pageSize eq 15} selected="selected"{/if}>15</option>

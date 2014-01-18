@@ -70,7 +70,7 @@ class ModelUtil extends Zikula_AbstractBase
             throw new \Exception('Error! Invalid object type received.');
         }
     
-        $entityClass = '\\Cmfcmf\\OAuthModule\\Entity\\' . ucwords($objectType) . 'Entity';
+        $entityClass = 'CmfcmfOAuthModule:' . ucwords($objectType) . 'Entity';
     
         $repository = $this->entityManager->getRepository($entityClass);
     

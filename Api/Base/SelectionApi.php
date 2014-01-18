@@ -33,7 +33,7 @@ class SelectionApi extends Zikula_AbstractApi
     public function getIdFields(array $args = array())
     {
         $objectType = $this->determineObjectType($args, 'getIdFields');
-        $entityClass = '\\Cmfcmf\\OAuthModule\\Entity\\' . ucfirst($objectType) . 'Entity';
+        $entityClass = 'CmfcmfOAuthModule:' . ucfirst($objectType) . 'Entity';
     
         $meta = $this->entityManager->getClassMetadata($entityClass);
         if ($this->hasCompositeKeys($objectType)) {
@@ -171,7 +171,7 @@ class SelectionApi extends Zikula_AbstractApi
             throw new \InvalidArgumentException(__('Invalid object type received.'));
         }
     
-        $entityClass = '\\Cmfcmf\\OAuthModule\\Entity\\' . ucwords($objectType) . 'Entity';
+        $entityClass = 'CmfcmfOAuthModule:' . ucwords($objectType) . 'Entity';
     
         return $this->entityManager->getRepository($entityClass);
     }

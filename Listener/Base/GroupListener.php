@@ -82,4 +82,18 @@ class GroupListener
     public static function removeUser(GenericEvent $event)
     {
     }
+    
+    /**
+     * Makes our handlers known to the event system.
+     */
+    public static function getSubscribedEvents()
+    {
+        return array(
+            'group.create'      => array('create', 5),
+            'group.update'      => array('update', 5),
+            'group.delete'      => array('delete', 5),
+            'group.adduser'     => array('addUser', 5),
+            'group.removeuser'  => array('removeUser', 5)
+        );
+    }
 }

@@ -611,7 +611,7 @@ abstract class AbstractMappedIdEntity extends Zikula_EntityAccess
     /**
      * Creates url arguments array for easy creation of display urls.
      *
-     * @return Array The resulting arguments list. 
+     * @return Array The resulting arguments list.
      */
     public function createUrlArgs()
     {

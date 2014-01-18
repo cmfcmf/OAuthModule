@@ -258,7 +258,7 @@ class WorkflowUtil extends Zikula_AbstractBase
      */
     public function getAmountOfModerationItems($objectType, $state)
     {
-        $entityClass = '\\Cmfcmf\\OAuthModule\\Entity\\' . ucwords($objectType) . 'Entity';
+        $entityClass = 'CmfcmfOAuthModule:' . ucwords($objectType) . 'Entity';
         $entityManager = $this->serviceManager->getService('doctrine.entitymanager');
     
         $repository = $entityManager->getRepository($entityClass);

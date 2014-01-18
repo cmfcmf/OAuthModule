@@ -225,4 +225,17 @@ class UserLoginListener
     public static function failed(GenericEvent $event)
     {
     }
+    
+    /**
+     * Makes our handlers known to the event system.
+     */
+    public static function getSubscribedEvents()
+    {
+        return array(
+            'module.users.ui.login.started'     => array('started', 5),
+            'module.users.ui.login.veto'        => array('veto', 5),
+            'module.users.ui.login.succeeded'   => array('succeeded', 5),
+            'module.users.ui.login.failed'      => array('failed', 5)
+        );
+    }
 }

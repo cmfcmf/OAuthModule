@@ -29,4 +29,14 @@ class FrontControllerListener
     public static function preDispatch(GenericEvent $event)
     {
     }
+    
+    /**
+     * Makes our handlers known to the event system.
+     */
+    public static function getSubscribedEvents()
+    {
+        return array(
+            'frontcontroller.predispatch' => array('preDispatch', 5)
+        );
+    }
 }

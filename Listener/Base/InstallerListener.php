@@ -20,7 +20,7 @@ use Zikula\Core\Event\GenericEvent;
 class InstallerListener
 {
     /**
-     * Listener for the `installer.module.installed` event.
+     * Listener for the `module.install` event.
      *
      * Called after a module has been successfully installed.
      * Receives `$modinfo` as args.
@@ -32,7 +32,7 @@ class InstallerListener
     }
     
     /**
-     * Listener for the `installer.module.upgraded` event.
+     * Listener for the `module.upgrade` event.
      *
      * Called after a module has been successfully upgraded.
      * Receives `$modinfo` as args.
@@ -44,34 +44,34 @@ class InstallerListener
     }
     
     /**
-     * Listener for the `installer.module.uninstalled` event.
+     * Listener for the `module.enable` event.
      *
-     * Called after a module has been successfully uninstalled.
+     * Called after a module has been successfully enabled.
+     * Receives `$modinfo` as args.
+     */
+    public static function moduleEnabled(GenericEvent $event)
+    {
+    }
+    
+    /**
+     * Listener for the `module.disable` event.
+     *
+     * Called after a module has been successfully disabled.
+     * Receives `$modinfo` as args.
+     */
+    public static function moduleDisabled(GenericEvent $event)
+    {
+    }
+    
+    /**
+     * Listener for the `module.remove` event.
+     *
+     * Called after a module has been successfully removed.
      * Receives `$modinfo` as args.
      *
      * @param GenericEvent $event The event instance.
      */
-    public static function moduleUninstalled(GenericEvent $event)
-    {
-    }
-    
-    /**
-     * Listener for the `installer.module.activated` event.
-     *
-     * Called after a module has been successfully activated.
-     * Receives `$modinfo` as args.
-     */
-    public static function moduleActivated(GenericEvent $event)
-    {
-    }
-    
-    /**
-     * Listener for the `installer.module.deactivated` event.
-     *
-     * Called after a module has been successfully deactivated.
-     * Receives `$modinfo` as args.
-     */
-    public static function moduleDeactivated(GenericEvent $event)
+    public static function moduleRemoved(GenericEvent $event)
     {
     }
     
@@ -85,5 +85,20 @@ class InstallerListener
      */
     public static function subscriberAreaUninstalled(GenericEvent $event)
     {
+    }
+    
+    /**
+     * Makes our handlers known to the event system.
+     */
+    public static function getSubscribedEvents()
+    {
+        return array(
+            CoreEvents::MODULE_INSTALL              => array('moduleInstalled', 5),
+            CoreEvents::MODULE_UPGRADE              => array('moduleUpgraded', 5),
+            CoreEvents::MODULE_ENABLE               => array('moduleEnabled', 5),
+            CoreEvents::MODULE_DISABLE              => array('moduleDisabled', 5),
+            CoreEvents::MODULE_REMOVE               => array('moduleRemoved', 5),
+            'installer.subscriberarea.uninstalled'  => array('subscriberAreaUninstalled', 5)
+        );
     }
 }

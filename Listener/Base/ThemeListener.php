@@ -81,4 +81,18 @@ class ThemeListener
     public static function postFetch(GenericEvent $event)
     {
     }
+    
+    /**
+     * Makes our handlers known to the event system.
+     */
+    public static function getSubscribedEvents()
+    {
+        return array(
+            'theme.preinit'     => array('preInit', 5),
+            'theme.init'        => array('init', 5),
+            'theme.load_config' => array('loadConfig', 5),
+            'theme.prefetch'    => array('preFetch', 5),
+            'theme.postfetch'   => array('postFetch', 5)
+        );
+    }
 }

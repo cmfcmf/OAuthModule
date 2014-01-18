@@ -30,4 +30,14 @@ class UsersListener
     public static function configUpdated(GenericEvent $event)
     {
     }
+    
+    /**
+     * Makes our handlers known to the event system.
+     */
+    public static function getSubscribedEvents()
+    {
+        return array(
+            'module.users.config.updated' => array('configUpdated', 5)
+        );
+    }
 }

@@ -106,7 +106,7 @@ class ItemSelector extends Zikula_Form_Plugin_TextInput
 
         $this->selectedItemId = $this->text;
 
-        $entityClass = '\\Cmfcmf\\OAuthModule\\Entity\\' . ucwords($this->objectType) . 'Entity';
+        $entityClass = 'CmfcmfOAuthModule:' . ucwords($this->objectType) . 'Entity';
         $serviceManager = ServiceUtil::getManager();
         $entityManager = $serviceManager->getService('doctrine.entitymanager');
         $repository = $entityManager->getRepository($entityClass);

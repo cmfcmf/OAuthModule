@@ -128,7 +128,7 @@ class AjaxController extends Zikula_Controller_AbstractAjax
             $objectType = $controllerHelper->getDefaultObjectType('controllerAction', $utilArgs);
         }
     
-        $entityClass = '\\Cmfcmf\\OAuthModule\\Entity\\' . ucfirst($objectType) . 'Entity';
+        $entityClass = 'CmfcmfOAuthModule:' . ucfirst($objectType) . 'Entity';
         $repository = $this->entityManager->getRepository($entityClass);
         $repository->setRequest($request);
         $idFields = ModUtil::apiFunc($this->name, 'selection', 'getIdFields', array('ot' => $objectType));

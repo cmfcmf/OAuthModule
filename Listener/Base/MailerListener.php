@@ -32,4 +32,14 @@ class MailerListener
     public static function sendMessage(GenericEvent $event)
     {
     }
+    
+    /**
+     * Makes our handlers known to the event system.
+     */
+    public static function getSubscribedEvents()
+    {
+        return array(
+            'module.mailer.api.sendmessage' => array('sendMessage', 5)
+        );
+    }
 }

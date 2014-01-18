@@ -92,7 +92,7 @@ class MappedIdValidator extends BaseAbstractValidator
             return false;
         }
     
-        $entityClass = '\\Cmfcmf\\OAuthModule\\Entity\\MappedIdEntity';
+        $entityClass = 'CmfcmfOAuthModule:MappedIdEntity';
         $serviceManager = ServiceUtil::getManager();
         $entityManager = $serviceManager->getService('doctrine.entitymanager');
         $repository = $entityManager->getRepository($entityClass);

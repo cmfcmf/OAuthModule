@@ -50,4 +50,15 @@ class PageListener
     public static function systemOutputFilter(GenericEvent $event)
     {
     }
+    
+    /**
+     * Makes our handlers known to the event system.
+     */
+    public static function getSubscribedEvents()
+    {
+        return array(
+            'pageutil.addvar_filter'        => array('pageutilAddvarFilter', 5),
+            'system.outputfilter'           => array('systemOutputfilter', 5)
+        );
+    }
 }

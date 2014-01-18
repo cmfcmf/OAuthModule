@@ -44,4 +44,15 @@ class ViewListener
     public static function postFetch(GenericEvent $event)
     {
     }
+    
+    /**
+     * Makes our handlers known to the event system.
+     */
+    public static function getSubscribedEvents()
+    {
+        return array(
+            'view.init'         => array('init', 5),
+            'view.postfetch'    => array('postFetch', 5)
+        );
+    }
 }

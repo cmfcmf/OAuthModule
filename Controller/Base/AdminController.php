@@ -97,7 +97,7 @@ class AdminController extends Zikula_AbstractController
         if (!SecurityUtil::checkPermission($this->name . ':' . ucwords($objectType) . ':', '::', ACCESS_ADMIN)) {
             throw new AccessDeniedException();
         }
-        $entityClass = '\\Cmfcmf\\OAuthModule\\Entity\\' . ucwords($objectType) . 'Entity';
+        $entityClass = 'CmfcmfOAuthModule:' . ucwords($objectType) . 'Entity';
         $repository = $this->entityManager->getRepository($entityClass);
         $repository->setRequest($this->request);
         $viewHelper = new ViewUtil($this->serviceManager, ModUtil::getModule($this->name));
@@ -313,7 +313,7 @@ class AdminController extends Zikula_AbstractController
             }
         }
         
-        $entityClass = '\\Cmfcmf\\OAuthModule\\Entity\\' . ucwords($objectType) . 'Entity';
+        $entityClass = 'CmfcmfOAuthModule:' . ucwords($objectType) . 'Entity';
         $repository = $this->entityManager->getRepository($entityClass);
         
         // set caching id
