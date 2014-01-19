@@ -50,7 +50,7 @@ class Twitter extends AbstractOAuth1Provider
     /**
      * {@inheritdoc}
      *
-     * @note Twitter does NOT provide the user's email address.
+     * NOTE: Twitter does NOT provide the user's email address.
      */
     public function getAdditionalInformationForRegistration()
     {
