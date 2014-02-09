@@ -11,21 +11,10 @@
 
 namespace Cmfcmf\OAuthModule\Provider;
 
-use OAuth\Common\Token\TokenInterface;
-
 /**
  * AbstractOAuth2Provider.Class used for every OAuth 2 provider.
  */
 abstract class AbstractOAuth2Provider extends AbstractOAuthProvider
 {
-    /**
-     * {@inheritdoc}
-     * @param TokenInterface $token
-     *
-     * @return string
-     */
-    public function extractClaimedIdFromToken(TokenInterface $token)
-    {
-        return $token->getAccessToken();
-    }
+
 }

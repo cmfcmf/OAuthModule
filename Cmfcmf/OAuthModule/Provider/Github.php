@@ -60,27 +60,6 @@ class Github extends AbstractOAuth2Provider
 
     /**
      * {@inheritdoc}
-     *
-     * Fetches the user's email address and GitHub user name.
-     */
-    public function getAdditionalInformationForRegistration()
-    {
-        try {
-            $result = json_decode($this->service->request('user/emails'), true);
-            $email = $result[0];
-
-            $result = json_decode($this->service->request('user'), true);
-            $uname = $result['login'];
-
-            return array('email' => $email, 'hideEmail' => true, 'uname' => $uname);
-        } catch (\Exception $e) {
-            // Catch anything.
-            return array();
-        }
-    }
-
-    /**
-     * {@inheritdoc}
      */
     public function getApplicationRegistrationDoc()
     {

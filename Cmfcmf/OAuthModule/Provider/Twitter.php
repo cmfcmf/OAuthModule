@@ -11,8 +11,6 @@
 
 namespace Cmfcmf\OAuthModule\Provider;
 
-use OAuth\Common\Token\TokenInterface;
-
 /**
  * The Twitter OAuth 2 provider class.
  */
@@ -32,38 +30,6 @@ class Twitter extends AbstractOAuth1Provider
     public function getIcon()
     {
         return 'fa-twitter';
-    }
-
-    /**
-     * {@inheritdoc}
-     * @param TokenInterface $token
-     *
-     * @return string
-     */
-    public function extractClaimedIdFromToken(TokenInterface $token)
-    {
-        $params = $token->getExtraParams();
-
-        return $params['user_id'];
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * NOTE: Twitter does NOT provide the user's email address.
-     */
-    public function getAdditionalInformationForRegistration()
-    {
-        try {
-            $result = json_decode($this->service->request('account/settings.json'), true);
-            $uname = $result['screen_name'];
-            $lang = $result['language'];
-
-            return array('lang' => $lang, 'uname' => $uname);
-        } catch (\Exception $e) {
-            // Catch anything.
-            return array();
-        }
     }
 
     /**

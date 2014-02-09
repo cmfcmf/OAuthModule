@@ -20,6 +20,7 @@ use Cmfcmf\OAuthModule\SymfonySession;
 use Cmfcmf\OAuthModule\Util\WorkflowUtil;
 use LogUtil;
 use ModUtil;
+use OAuth\UserData\ExtractorFactory;
 use ServiceUtil;
 use SessionUtil;
 use Symfony\Component\Debug\Exception\FatalErrorException;
@@ -429,14 +430,43 @@ class AuthenticationApi extends Zikula_Api_AbstractAuthentication
                     $token = $service->requestAccessToken($code);
                 }
 
-                $claimedId = $OAuthHelper->extractClaimedIdFromToken($token);
+                $extractorFactory = new ExtractorFactory();
+                $extractor = $extractorFactory->get($service);
 
                 $returnResult = array(
-                    'claimed_id' => $claimedId
+                    'claimed_id' => $extractor->getUniqueId()
                 );
 
                 if ($forRegistration) {
-                    $returnResult = array_merge($returnResult, $OAuthHelper->getAdditionalInformationForRegistration());
+                    /*
+                     * Get further information about the user from $service.
+                     *
+                     * Possible extracted information:
+                     * - 'uname': The user name.
+                     * - 'email': The email address.
+                     * - 'hideEmail': Whether to hide the email address fields during registration. This does NOT mean the email cannot
+                     * be changed. It will be hidden only and still can be changed by the user. Maybe it even must be changed, if the
+                     * email address is in use already.
+                     * - 'emailVerified': If the email address does not need validation. Note that the email address still could be
+                     * changed by the user, in this case validation will be re-enabled.
+                     * - 'lang': The user's preferred language.
+                     */
+                    if ($extractor->supportsUsername()) {
+                        $returnResult['uname'] = $OAuthHelper->sanitizeUname($extractor->getUsername());
+                    }
+
+                    if ($extractor->supportsEmail()) {
+                        $returnResult['email'] = $extractor->getEmail();
+                        $returnResult['hideEmail'] = true;
+                    }
+
+                    //if ($extractor->supportsUsername()) {
+                    $returnResult['emailVerified'] = false; //$extractor->getUsername();
+                    //}
+
+                    if ($extractor->supportsLocation()) {
+                        $returnResult['lang'] = $extractor->getLocation();
+                    }
                 }
 
                 // Cache result.
