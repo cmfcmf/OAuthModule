@@ -439,8 +439,6 @@ class AuthenticationApi extends Zikula_Api_AbstractAuthentication
 
                 if ($forRegistration) {
                     /*
-                     * Get further information about the user from $service.
-                     *
                      * Possible extracted information:
                      * - 'uname': The user name.
                      * - 'email': The email address.
@@ -451,22 +449,11 @@ class AuthenticationApi extends Zikula_Api_AbstractAuthentication
                      * changed by the user, in this case validation will be re-enabled.
                      * - 'lang': The user's preferred language.
                      */
-                    if ($extractor->supportsUsername()) {
-                        $returnResult['uname'] = $OAuthHelper->sanitizeUname($extractor->getUsername());
-                    }
-
-                    if ($extractor->supportsEmail()) {
-                        $returnResult['email'] = $extractor->getEmail();
-                        $returnResult['hideEmail'] = true;
-                    }
-
-                    //if ($extractor->supportsUsername()) {
-                    $returnResult['emailVerified'] = false; //$extractor->getUsername();
-                    //}
-
-                    if ($extractor->supportsLocation()) {
-                        $returnResult['lang'] = $extractor->getLocation();
-                    }
+                    $returnResult['uname'] = $extractor->supportsUsername() ? $OAuthHelper->sanitizeUname($extractor->getUsername()) : null;
+                    $returnResult['email'] = $extractor->supportsEmail() ? $extractor->getEmail() : null;
+                    $returnResult['hideEmail'] = $extractor->supportsEmail() && $extractor->getEmail() != "";
+                    $returnResult['emailVerified'] = $extractor->supportsVerifiedEmail() ? $extractor->isEmailVerified() : false;
+                    //$returnResult['lang'] = $extractor->supportsLanguage() ? $extractor->getLanguage() : null;
                 }
 
                 // Cache result.

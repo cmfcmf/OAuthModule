@@ -11,12 +11,6 @@
 
 namespace Cmfcmf\OAuthModule\Provider;
 
-use OAuth\Common\Http\Client\CurlClient;
-use OAuth\Common\Http\Client\StreamClient;
-use OAuth\ServiceFactory;
-use OAuth\Common\Consumer\Credentials;
-use OAuth\Common\Storage\TokenStorageInterface;
-use Symfony\Component\Debug\Exception\FatalErrorException;
 use OAuth\OAuth2\Service\Google as GoogleService;
 
 /**
