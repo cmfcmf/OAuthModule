@@ -55,7 +55,7 @@ class Google extends AbstractOAuth2Provider
      */
     public function getApplicationRegistrationDoc()
     {
-        $message = $this->__('You need to register an application at <a href="https://cloud.google.com/console#/project">https://cloud.google.com/console#/project</a> to use Google OAuth.');
+        $message = $this->__('You need to register an application at <a href="https://cloud.google.com/console/project">https://cloud.google.com/console/project</a> to use Google OAuth.');
         return $message . '<br />' . parent::getApplicationRegistrationDoc();
     }
 }
