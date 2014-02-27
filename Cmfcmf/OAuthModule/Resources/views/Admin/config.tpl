@@ -6,6 +6,9 @@
     .cmfcmfoauthmodule-config .cmfcmfoauthmodule-passwordToggle {
         cursor: pointer;
     }
+    .cmfcmfoauthmodule-config .nav.nav-tabs {
+        margin-bottom: 15px;
+    }
 </style>
 {/pageaddvarblock}
 <div class="cmfcmfoauthmodule-config">
@@ -22,7 +25,7 @@
 
             <!-- Nav tabs -->
             <ul class="nav nav-tabs">
-                <li><a href="#general" data-toggle="tab">{gt text='General settings'}</a></li>
+                <li class="active"><a href="#general" data-toggle="tab">{gt text='General settings'}</a></li>
                 {foreach from=$providers item='provider'}
                     <li><a href="#tab{$provider->getProviderName()}" data-toggle="tab">{$provider->getProviderDisplayName()}</a></li>
                 {/foreach}
