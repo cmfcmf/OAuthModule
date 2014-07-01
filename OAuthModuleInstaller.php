@@ -32,21 +32,18 @@ class OAuthModuleInstaller extends BaseOAuthModuleInstaller
         $returnValue = parent::install();
 
         if ($returnValue === true) {
-            return true;
-            // @todo
             try {
                 // The default group of a new user.
                 $defaultGroup = ModUtil::getVar('ZikulaGroupsModule', 'defaultgroup', false);
-                $permissionArgs = array('id'        => (int)$defaultGroup,
+                $permissionArgs = array('id'        => $defaultGroup,
                                         'component' => $this->name . ':MappedId:',
                                         'instance'  => '.*',
                                         'level'     => ACCESS_DELETE,
-                                        'insseq'    => 1,
-                                        'realm'     => 0
+                                        'insseq'    => 1
                 );
 
                 $permission = ModUtil::apiFunc('ZikulaPermissionsModule', 'admin', 'create', $permissionArgs);
-                $this->setVar('permissionId', $permission['id']);
+                $this->setVar('permissionId', $permission->getId());
 
             } catch (AccessDeniedException $e) {
                 // The user seems not to have appropriate access to create the permission rule. Only create a warning.

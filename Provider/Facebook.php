@@ -59,6 +59,21 @@ class Facebook extends AbstractOAuth2Provider
      *
      * @todo To be implemented!
      */
+    public function getAdditionalInformationForRegistration()
+    {
+        try {
+            return array();
+        } catch (\Exception $e) {
+            // Catch anything.
+            return array();
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @todo To be implemented!
+     */
     public function getApplicationRegistrationDoc()
     {
         parent::getApplicationRegistrationDoc();
